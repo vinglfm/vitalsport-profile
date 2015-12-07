@@ -2,14 +2,15 @@ package com.vitalsport.profile.model;
 
 import lombok.Data;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.time.LocalDate;
 
 @Data
 @Entity
 public class BodyInfo {
-    private LocalDate date;
+
+    @EmbeddedId
+    private BodyId id;
 
     private double neck;
     private double chest;

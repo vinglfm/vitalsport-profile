@@ -1,15 +1,14 @@
 package com.vitalsport.profile.service;
 
+import com.vitalsport.profile.model.BodyId;
 import com.vitalsport.profile.model.BodyInfo;
 
 import java.time.LocalDate;
 
 public interface BodyInfoService {
-    void saveBodyInfo(String userId, BodyInfo bodyInfo);
+    void saveBodyInfo(BodyId id, BodyInfo bodyInfo);
 
-    void updateBodyInfo(String userId, LocalDate measurementDate);
+    BodyInfo getBodyInfo(BodyId id);
 
-    BodyInfo getBodyInfo(String userId, LocalDate measurementDate);
-
-    void deleteBodyInfo(String userId, LocalDate measurementDate);
+    void deleteBodyInfo(BodyId id);
 }

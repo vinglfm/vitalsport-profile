@@ -1,33 +1,35 @@
 package com.vitalsport.profile.service;
 
+import com.vitalsport.profile.model.BodyId;
 import com.vitalsport.profile.model.BodyInfo;
+import com.vitalsport.profile.repository.BodyInfoRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 
 @Slf4j
 @Service
 public class BasicBodyInfoService implements BodyInfoService {
 
+    @Autowired
+    private BodyInfoRepository bodyInfoRepository;
+
     @Override
-    public void saveBodyInfo(String userId, BodyInfo bodyInfo) {
-        log.info("Saving bodyInfo for userId = %s, body = %s", userId, bodyInfo);
+    public void saveBodyInfo(BodyId id, BodyInfo bodyInfo) {
+        log.info("Saving bodyInfo for id = %s, body = %s", id, bodyInfo);
+        bodyInfo.setId(id);
+        bodyInfoRepository.save(bodyInfo);
     }
 
     @Override
-    public void updateBodyInfo(String userId, LocalDate measurementDate) {
-        log.info("Updating bodyInfo for userId = %s, measurementDate = %s", userId, measurementDate);
+    public BodyInfo getBodyInfo(BodyId id) {
+        log.info("Retrieving bodyInfo for id = %s", id);
+        return bodyInfoRepository.findOne(id);
     }
 
     @Override
-    public BodyInfo getBodyInfo(String userId, LocalDate measurementDate) {
-        log.info("Retrieving bodyInfo for userId = %s, measurementDate = %s", userId, measurementDate);
-        return null;
-    }
-
-    @Override
-    public void deleteBodyInfo(String userId, LocalDate measurementDate) {
-        log.info("Deleting bodyInfo for userId = %s, measurementDate = %s", userId, measurementDate);
+    public void deleteBodyInfo(BodyId id) {
+        log.info("Deleting bodyInfo for id = %s", id);
+        bodyInfoRepository.delete(id);
     }
 }
