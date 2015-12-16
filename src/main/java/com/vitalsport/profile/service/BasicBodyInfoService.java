@@ -11,8 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class BasicBodyInfoService implements BodyInfoService {
 
-    @Autowired
     private BodyInfoRepository bodyInfoRepository;
+
+    @Autowired
+    public BasicBodyInfoService(BodyInfoRepository bodyInfoRepository) {
+        this.bodyInfoRepository = bodyInfoRepository;
+    }
 
     @Override
     public void saveBodyInfo(BodyId id, BodyInfo bodyInfo) {
