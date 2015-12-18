@@ -1,7 +1,7 @@
 package com.vitalsport.profile.service;
 
 import com.vitalsport.profile.model.MeasurementId;
-import com.vitalsport.profile.model.BodyInfo;
+import com.vitalsport.profile.model.StrengthInfo;
 import com.vitalsport.profile.repository.MeasurementInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,50 +9,50 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class BodyInfoService implements MeasurementInfoService<BodyInfo> {
+public class StrengthInfoService implements MeasurementInfoService<StrengthInfo> {
 
-    private MeasurementInfoRepository<BodyInfo> measurementInfoRepository;
+    private MeasurementInfoRepository<StrengthInfo> strengthInfoRepository;
 
     @Autowired
-    public BodyInfoService(MeasurementInfoRepository measurementInfoRepository) {
-        this.measurementInfoRepository = measurementInfoRepository;
+    public StrengthInfoService(MeasurementInfoRepository<StrengthInfo> strengthInfoRepository) {
+        this.strengthInfoRepository = strengthInfoRepository;
     }
 
     @Override
-    public void save(MeasurementId id, BodyInfo bodyInfo) {
-        if(id == null) {
+    public void save(MeasurementId id, StrengthInfo bodyInfo) {
+        if (id == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
-        if(bodyInfo == null) {
+        if (bodyInfo == null) {
             throw new IllegalArgumentException("bodyInfo couldn't be null");
         }
 
         log.info("Saving bodyInfo for id = %s, body = %s", id, bodyInfo);
 
         bodyInfo.setId(id);
-        measurementInfoRepository.save(bodyInfo);
+        strengthInfoRepository.save(bodyInfo);
     }
 
     @Override
-    public BodyInfo get(MeasurementId id) {
-        if(id == null) {
+    public StrengthInfo get(MeasurementId id) {
+        if (id == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
         log.info("Retrieving bodyInfo for id = %s", id);
 
-        return measurementInfoRepository.findOne(id);
+        return strengthInfoRepository.findOne(id);
     }
 
     @Override
     public void delete(MeasurementId id) {
-        if(id == null) {
+        if (id == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
         log.info("Deleting bodyInfo for id = %s", id);
 
-        measurementInfoRepository.delete(id);
+        strengthInfoRepository.delete(id);
     }
 }

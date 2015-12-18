@@ -1,60 +1,57 @@
 package com.vitalsport.profile.service;
 
 import com.vitalsport.profile.configuration.ServiceTestConfiguration;
-import com.vitalsport.profile.model.BodyId;
+import com.vitalsport.profile.model.MeasurementId;
 import com.vitalsport.profile.model.BodyInfo;
-import com.vitalsport.profile.repository.BodyInfoRepository;
+import com.vitalsport.profile.repository.MeasurementInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
-import java.time.LocalDate;
-
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
-import static org.testng.Assert.*;
 
 @ContextConfiguration(classes = {ServiceTestConfiguration.class})
-public class BasicBodyInfoServiceTest extends AbstractTestNGSpringContextTests {
+public class BodyInfoServiceTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    private BasicBodyInfoService basicBodyInfoService;
+    private BodyInfoService basicBodyInfoService;
 
     @Autowired
-    private BodyInfoRepository mockBodyInfoRepository;
+    private MeasurementInfoRepository mockMeasurementInfoRepository;
 
     @Test
     public void bodyInfoIsSaved() {
 
-        BodyId bodyId = mock(BodyId.class);
+        MeasurementId measurementId = mock(MeasurementId.class);
         BodyInfo bodyInfo = mock(BodyInfo.class);
 
-        basicBodyInfoService.saveBodyInfo(bodyId, bodyInfo);
+        basicBodyInfoService.save(measurementId, bodyInfo);
 
-        verify(mockBodyInfoRepository, times(1)).save(bodyInfo);
+        verify(mockMeasurementInfoRepository, times(1)).save(bodyInfo);
     }
 
     @Test
     public void bodyInfoIsReturnedByBodyId() {
-        BodyId bodyId = mock(BodyId.class);
+        MeasurementId measurementId = mock(MeasurementId.class);
         BodyInfo bodyInfo = mock(BodyInfo.class);
 
-        when(mockBodyInfoRepository.findOne(bodyId)).thenReturn(bodyInfo);
-        BodyInfo actualResult = basicBodyInfoService.getBodyInfo(bodyId);
+        when(mockMeasurementInfoRepository.findOne(measurementId)).thenReturn(bodyInfo);
+        BodyInfo actualResult = basicBodyInfoService.get(measurementId);
 
-        verify(mockBodyInfoRepository, times(1)).findOne(bodyId);
+        verify(mockMeasurementInfoRepository, times(1)).findOne(measurementId);
         assertThat(actualResult).isEqualToComparingFieldByField(bodyInfo);
     }
 
     @Test
     public void bodyInfoIsDeletedByBodyId() {
-        BodyId bodyId = mock(BodyId.class);
+        MeasurementId measurementId = mock(MeasurementId.class);
 
-        basicBodyInfoService.deleteBodyInfo(bodyId);
+        basicBodyInfoService.delete(measurementId);
 
-        verify(mockBodyInfoRepository, times(1)).delete(bodyId);
+        verify(mockMeasurementInfoRepository, times(1)).delete(measurementId);
     }
 
 }

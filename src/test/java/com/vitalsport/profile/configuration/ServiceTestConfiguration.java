@@ -1,7 +1,8 @@
 package com.vitalsport.profile.configuration;
 
-import com.vitalsport.profile.repository.BodyInfoRepository;
-import com.vitalsport.profile.service.BasicBodyInfoService;
+import com.vitalsport.profile.repository.MeasurementInfoRepository;
+import com.vitalsport.profile.service.BodyInfoService;
+import com.vitalsport.profile.service.StrengthInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,13 +15,19 @@ import static org.mockito.Mockito.mock;
 public class ServiceTestConfiguration {
 
     @Bean
-    public BodyInfoRepository mockBodyInfoRepository() {
-        return mock(BodyInfoRepository.class);
+    public MeasurementInfoRepository mockBodyInfoRepository() {
+        return mock(MeasurementInfoRepository.class);
     }
 
     @Bean
     @Autowired
-    public BasicBodyInfoService basicBodyInfoService(BodyInfoRepository mockBodyInfoRepository) {
-        return new BasicBodyInfoService(mockBodyInfoRepository);
+    public BodyInfoService basicBodyInfoService(MeasurementInfoRepository mockMeasurementInfoRepository) {
+        return new BodyInfoService(mockMeasurementInfoRepository);
+    }
+
+    @Bean
+    @Autowired
+    public StrengthInfoService basicStrengthInfoService(MeasurementInfoRepository mockMeasurementInfoRepository) {
+        return new StrengthInfoService(mockMeasurementInfoRepository);
     }
 }
