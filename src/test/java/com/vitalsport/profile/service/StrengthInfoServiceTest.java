@@ -3,7 +3,7 @@ package com.vitalsport.profile.service;
 import com.vitalsport.profile.configuration.ServiceTestConfiguration;
 import com.vitalsport.profile.model.MeasurementId;
 import com.vitalsport.profile.model.StrengthInfo;
-import com.vitalsport.profile.repository.MeasurementInfoRepository;
+import com.vitalsport.profile.repository.InfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -20,7 +20,7 @@ public class StrengthInfoServiceTest  extends AbstractTestNGSpringContextTests {
     private StrengthInfoService strengthInfoService;
 
     @Autowired
-    private MeasurementInfoRepository mockMeasurementInfoRepository;
+    private InfoRepository mockInfoRepository;
 
     @Test
     public void strengthInfoIsSaved() {
@@ -30,7 +30,7 @@ public class StrengthInfoServiceTest  extends AbstractTestNGSpringContextTests {
 
         strengthInfoService.save(measurementId, strengthInfo);
 
-        verify(mockMeasurementInfoRepository, times(1)).save(strengthInfo);
+        verify(mockInfoRepository, times(1)).save(strengthInfo);
     }
 
     @Test
@@ -38,10 +38,10 @@ public class StrengthInfoServiceTest  extends AbstractTestNGSpringContextTests {
         MeasurementId measurementId = mock(MeasurementId.class);
         StrengthInfo strengthInfo = mock(StrengthInfo.class);
 
-        when(mockMeasurementInfoRepository.findOne(measurementId)).thenReturn(strengthInfo);
+        when(mockInfoRepository.findOne(measurementId)).thenReturn(strengthInfo);
         StrengthInfo actualResult = strengthInfoService.get(measurementId);
 
-        verify(mockMeasurementInfoRepository, times(1)).findOne(measurementId);
+        verify(mockInfoRepository, times(1)).findOne(measurementId);
         assertThat(actualResult).isEqualToComparingFieldByField(strengthInfo);
     }
 
@@ -51,6 +51,6 @@ public class StrengthInfoServiceTest  extends AbstractTestNGSpringContextTests {
 
         strengthInfoService.delete(measurementId);
 
-        verify(mockMeasurementInfoRepository, times(1)).delete(measurementId);
+        verify(mockInfoRepository, times(1)).delete(measurementId);
     }
 }

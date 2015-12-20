@@ -2,36 +2,36 @@ package com.vitalsport.profile.service;
 
 import com.vitalsport.profile.model.MeasurementId;
 import com.vitalsport.profile.model.StrengthInfo;
-import com.vitalsport.profile.repository.MeasurementInfoRepository;
+import com.vitalsport.profile.repository.InfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class StrengthInfoService implements MeasurementInfoService<StrengthInfo> {
+public class StrengthInfoService implements MeasurementInfoService<MeasurementId, StrengthInfo> {
 
-    private MeasurementInfoRepository<StrengthInfo> strengthInfoRepository;
+    private InfoRepository<MeasurementId, StrengthInfo> strengthInfoRepository;
 
     @Autowired
-    public StrengthInfoService(MeasurementInfoRepository<StrengthInfo> strengthInfoRepository) {
+    public StrengthInfoService(InfoRepository<MeasurementId, StrengthInfo> strengthInfoRepository) {
         this.strengthInfoRepository = strengthInfoRepository;
     }
 
     @Override
-    public void save(MeasurementId id, StrengthInfo bodyInfo) {
+    public void save(MeasurementId id, StrengthInfo strengthInfo) {
         if (id == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
-        if (bodyInfo == null) {
-            throw new IllegalArgumentException("bodyInfo couldn't be null");
+        if (strengthInfo == null) {
+            throw new IllegalArgumentException("strengthInfo couldn't be null");
         }
 
-        log.info("Saving bodyInfo for id = %s, body = %s", id, bodyInfo);
+        log.info("Saving strengthInfo for id = %s, strength = %s", id, strengthInfo);
 
-        bodyInfo.setId(id);
-        strengthInfoRepository.save(bodyInfo);
+        strengthInfo.setId(id);
+        strengthInfoRepository.save(strengthInfo);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class StrengthInfoService implements MeasurementInfoService<StrengthInfo>
             throw new IllegalArgumentException("id couldn't be null");
         }
 
-        log.info("Retrieving bodyInfo for id = %s", id);
+        log.info("Retrieving strengthInfo for id = %s", id);
 
         return strengthInfoRepository.findOne(id);
     }
@@ -51,7 +51,7 @@ public class StrengthInfoService implements MeasurementInfoService<StrengthInfo>
             throw new IllegalArgumentException("id couldn't be null");
         }
 
-        log.info("Deleting bodyInfo for id = %s", id);
+        log.info("Deleting strengthInfo for id = %s", id);
 
         strengthInfoRepository.delete(id);
     }

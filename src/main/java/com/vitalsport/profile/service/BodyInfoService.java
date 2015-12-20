@@ -2,20 +2,20 @@ package com.vitalsport.profile.service;
 
 import com.vitalsport.profile.model.MeasurementId;
 import com.vitalsport.profile.model.BodyInfo;
-import com.vitalsport.profile.repository.MeasurementInfoRepository;
+import com.vitalsport.profile.repository.InfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class BodyInfoService implements MeasurementInfoService<BodyInfo> {
+public class BodyInfoService implements MeasurementInfoService<MeasurementId, BodyInfo> {
 
-    private MeasurementInfoRepository<BodyInfo> measurementInfoRepository;
+    private InfoRepository<MeasurementId, BodyInfo> infoRepository;
 
     @Autowired
-    public BodyInfoService(MeasurementInfoRepository measurementInfoRepository) {
-        this.measurementInfoRepository = measurementInfoRepository;
+    public BodyInfoService(InfoRepository infoRepository) {
+        this.infoRepository = infoRepository;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class BodyInfoService implements MeasurementInfoService<BodyInfo> {
         log.info("Saving bodyInfo for id = %s, body = %s", id, bodyInfo);
 
         bodyInfo.setId(id);
-        measurementInfoRepository.save(bodyInfo);
+        infoRepository.save(bodyInfo);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class BodyInfoService implements MeasurementInfoService<BodyInfo> {
 
         log.info("Retrieving bodyInfo for id = %s", id);
 
-        return measurementInfoRepository.findOne(id);
+        return infoRepository.findOne(id);
     }
 
     @Override
@@ -53,6 +53,6 @@ public class BodyInfoService implements MeasurementInfoService<BodyInfo> {
 
         log.info("Deleting bodyInfo for id = %s", id);
 
-        measurementInfoRepository.delete(id);
+        infoRepository.delete(id);
     }
 }

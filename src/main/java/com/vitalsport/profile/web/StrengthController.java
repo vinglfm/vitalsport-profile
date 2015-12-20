@@ -30,7 +30,7 @@ public class StrengthController {
                                                @RequestBody StrengthInfo strengthInfo) {
         try {
             strengthInfoService.save(prepareStrengthId(userId, date), strengthInfo);
-            return ok("User body info has been saved.");
+            return ok("User strength info has been saved.");
         } catch (DateTimeParseException exception) {
             return badRequest().body(String.format("date = %s has not valid format.", date));
         } catch (IllegalArgumentException exception) {
@@ -44,7 +44,6 @@ public class StrengthController {
 
         try {
             StrengthInfo strengthInfo = strengthInfoService.get(prepareStrengthId(userId, date));
-
             return ok(strengthInfo == null ? "" : strengthInfo.toString());
         } catch (DateTimeParseException exception) {
             return badRequest().body(String.format("date = %s has not valid format.", date));
@@ -58,7 +57,7 @@ public class StrengthController {
     public ResponseEntity<String> deleteStrengthInfo(@PathVariable String userId, @PathVariable String date) {
         try {
             strengthInfoService.delete(prepareStrengthId(userId, date));
-            return ok("User body info has been deleted");
+            return ok("User strength info has been deleted");
         } catch (DateTimeParseException exception) {
             return badRequest().body(String.format("date = %s has not valid format.", date));
         } catch (IllegalArgumentException exception) {

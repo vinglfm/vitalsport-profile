@@ -3,10 +3,10 @@ package com.vitalsport.profile.service;
 import com.vitalsport.profile.model.MeasurementId;
 import com.vitalsport.profile.model.BodyInfo;
 
-public interface MeasurementInfoService<T> {
-    void save(MeasurementId id, T bodyInfo);
+public interface MeasurementInfoService<K, D> {
+    void save(K id, D bodyInfo);
 
-    T get(MeasurementId id);
+    D get(K id);
 
-    void delete(MeasurementId id);
+    void delete(K id);
 }
