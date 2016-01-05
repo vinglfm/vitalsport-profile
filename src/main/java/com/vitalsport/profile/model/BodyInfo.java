@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 public class BodyInfo {
 
     @EmbeddedId
-    private MeasurementId id;
+    private InfoId id;
 
     private double neck;
     private double chest;
@@ -28,7 +28,4 @@ public class BodyInfo {
     private double height;
     private double weight;
     private int fatPercentage;
-//
-//    private String weightMeasurement;
-//    private String lengthMeasurement;
 }

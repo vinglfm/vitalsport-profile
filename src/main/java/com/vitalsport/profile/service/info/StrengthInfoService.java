@@ -1,25 +1,25 @@
-package com.vitalsport.profile.service;
+package com.vitalsport.profile.service.info;
 
-import com.vitalsport.profile.model.MeasurementId;
+import com.vitalsport.profile.model.InfoId;
 import com.vitalsport.profile.model.StrengthInfo;
-import com.vitalsport.profile.repository.InfoRepository;
+import com.vitalsport.profile.repository.StrengthInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class StrengthInfoService implements MeasurementInfoService<MeasurementId, StrengthInfo> {
+public class StrengthInfoService implements InfoService<InfoId, StrengthInfo> {
 
-    private InfoRepository<MeasurementId, StrengthInfo> strengthInfoRepository;
+    private StrengthInfoRepository strengthInfoRepository;
 
     @Autowired
-    public StrengthInfoService(InfoRepository<MeasurementId, StrengthInfo> strengthInfoRepository) {
+    public StrengthInfoService(StrengthInfoRepository strengthInfoRepository) {
         this.strengthInfoRepository = strengthInfoRepository;
     }
 
     @Override
-    public void save(MeasurementId id, StrengthInfo strengthInfo) {
+    public void save(InfoId id, StrengthInfo strengthInfo) {
         if (id == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }
@@ -35,7 +35,7 @@ public class StrengthInfoService implements MeasurementInfoService<MeasurementId
     }
 
     @Override
-    public StrengthInfo get(MeasurementId id) {
+    public StrengthInfo get(InfoId id) {
         if (id == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }
@@ -46,7 +46,7 @@ public class StrengthInfoService implements MeasurementInfoService<MeasurementId
     }
 
     @Override
-    public void delete(MeasurementId id) {
+    public void delete(InfoId id) {
         if (id == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }

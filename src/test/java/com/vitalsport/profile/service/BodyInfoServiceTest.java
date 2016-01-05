@@ -1,57 +1,80 @@
 package com.vitalsport.profile.service;
 
-import com.vitalsport.profile.configuration.ServiceTestConfiguration;
-import com.vitalsport.profile.model.MeasurementId;
+import com.vitalsport.profile.model.InfoId;
 import com.vitalsport.profile.model.BodyInfo;
-import com.vitalsport.profile.repository.InfoRepository;
+import com.vitalsport.profile.model.Measurements;
+import com.vitalsport.profile.repository.BodyInfoRepository;
+import com.vitalsport.profile.repository.MeasurementRepository;
+import com.vitalsport.profile.service.info.BodyInfoService;
+import com.vitalsport.profile.service.measurements.InfoMeasurementsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-@ContextConfiguration(classes = {ServiceTestConfiguration.class})
-public class BodyInfoServiceTest extends AbstractTestNGSpringContextTests {
+public class BodyInfoServiceTest extends BaseServiceTest {
 
     @Autowired
-    private BodyInfoService basicBodyInfoService;
+    private BodyInfoService bodyInfoService;
 
     @Autowired
-    private InfoRepository mockInfoRepository;
+    private BodyInfoRepository mockBodyInfoRepository;
+
+    @Autowired
+    private MeasurementRepository mockMeasurementRepository;
+
+    @BeforeTest
+    public void before() {
+        mockMeasurementRepository = mock(MeasurementRepository.class);
+        mockBodyInfoRepository = mock(BodyInfoRepository.class);
+        bodyInfoService = new BodyInfoService(mockBodyInfoRepository,
+                new InfoMeasurementsService(mockMeasurementRepository));
+    }
 
     @Test
     public void bodyInfoIsSaved() {
 
-        MeasurementId measurementId = mock(MeasurementId.class);
-        BodyInfo bodyInfo = mock(BodyInfo.class);
+        InfoId infoId = prepareInfoId(localDate, userId);
+        BodyInfo bodyInfo = prepareBodyInfo(infoId);
 
-        basicBodyInfoService.save(measurementId, bodyInfo);
+        bodyInfoService.save(infoId, bodyInfo);
 
-        verify(mockInfoRepository, times(1)).save(bodyInfo);
+        verify(mockBodyInfoRepository, times(1)).save(bodyInfo);
+        //TODO: test saving concrete measurements
+        verify(mockMeasurementRepository, times(1)).save(any(Measurements.class));
     }
 
     @Test
-    public void bodyInfoIsReturnedByBodyId() {
-        MeasurementId measurementId = mock(MeasurementId.class);
-        BodyInfo bodyInfo = mock(BodyInfo.class);
+    public void bodyInfoIsReturnedByInfoId() {
+        InfoId infoId = prepareInfoId(localDate, userId);
+        BodyInfo bodyInfo = prepareBodyInfo(infoId);
 
-        when(mockInfoRepository.findOne(measurementId)).thenReturn(bodyInfo);
-        BodyInfo actualResult = basicBodyInfoService.get(measurementId);
+        when(mockBodyInfoRepository.findOne(infoId)).thenReturn(bodyInfo);
+        BodyInfo actualResult = bodyInfoService.get(infoId);
 
-        verify(mockInfoRepository, times(1)).findOne(measurementId);
+        verify(mockBodyInfoRepository, times(1)).findOne(infoId);
+
         assertThat(actualResult).isEqualToComparingFieldByField(bodyInfo);
     }
 
     @Test
     public void bodyInfoIsDeletedByBodyId() {
-        MeasurementId measurementId = mock(MeasurementId.class);
+        InfoId infoId = prepareInfoId(localDate, userId);
 
-        basicBodyInfoService.delete(measurementId);
+        bodyInfoService.delete(infoId);
 
-        verify(mockInfoRepository, times(1)).delete(measurementId);
+        verify(mockBodyInfoRepository, times(1)).delete(infoId);
     }
 
+    private BodyInfo prepareBodyInfo(InfoId infoId) {
+        BodyInfo bodyInfo = new BodyInfo();
+        bodyInfo.setId(infoId);
+        bodyInfo.setBiceps(37);
+        bodyInfo.setChest(60);
+        bodyInfo.setFatPercentage(18);
+        return bodyInfo;
+    }
 }

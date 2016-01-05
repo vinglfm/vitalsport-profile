@@ -1,19 +1,19 @@
-package com.vitalsport.profile.service;
+package com.vitalsport.profile.service.info;
 
 import com.vitalsport.profile.model.UserInfo;
-import com.vitalsport.profile.repository.InfoRepository;
+import com.vitalsport.profile.repository.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class UserInfoService implements MeasurementInfoService<String, UserInfo> {
+public class UserInfoService implements InfoService<String, UserInfo> {
 
-    private InfoRepository<String, UserInfo> infoRepository;
+    private UserInfoRepository infoRepository;
 
     @Autowired
-    public UserInfoService(InfoRepository<String, UserInfo> infoRepository) {
+    public UserInfoService(UserInfoRepository infoRepository) {
         this.infoRepository = infoRepository;
     }
 

@@ -1,8 +1,8 @@
 package com.vitalsport.profile.web;
 
-import com.vitalsport.profile.model.MeasurementId;
+import com.vitalsport.profile.model.InfoId;
 import com.vitalsport.profile.model.StrengthInfo;
-import com.vitalsport.profile.service.StrengthInfoService;
+import com.vitalsport.profile.service.info.StrengthInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,8 +15,10 @@ import java.time.format.DateTimeParseException;
 
 import static com.vitalsport.profile.common.CommonUtils.decode;
 import static com.vitalsport.profile.common.CommonUtils.getMeasurementDate;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.status;
 
 @Controller
 @RequestMapping(value = "/profile")
@@ -44,7 +46,10 @@ public class StrengthController {
 
         try {
             StrengthInfo strengthInfo = strengthInfoService.get(prepareStrengthId(userId, date));
-            return ok(strengthInfo == null ? "" : strengthInfo.toString());
+
+            return (strengthInfo == null ?
+                    status(NOT_FOUND).body("Strength info wasn't found for userId = " + userId + " and date = " + date)
+                    : ok(strengthInfo.toString()));
         } catch (DateTimeParseException exception) {
             return badRequest().body(String.format("date = %s has not valid format.", date));
         } catch (IllegalArgumentException exception) {
@@ -65,7 +70,7 @@ public class StrengthController {
         }
     }
 
-    private MeasurementId prepareStrengthId(String userId, String date) {
-        return new MeasurementId(decode(userId), getMeasurementDate(date));
+    private InfoId prepareStrengthId(String userId, String date) {
+        return new InfoId(decode(userId), getMeasurementDate(date));
     }
 }

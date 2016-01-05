@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
-public class MeasurementId implements Serializable {
+public class InfoId implements Serializable {
     private String userId;
     @Convert(converter = LocalDatePersistenceConverter.class)
     private LocalDate date;

@@ -1,56 +1,68 @@
 package com.vitalsport.profile.service;
 
-import com.vitalsport.profile.configuration.ServiceTestConfiguration;
-import com.vitalsport.profile.model.MeasurementId;
+import com.vitalsport.profile.model.InfoId;
 import com.vitalsport.profile.model.StrengthInfo;
-import com.vitalsport.profile.repository.InfoRepository;
+import com.vitalsport.profile.repository.StrengthInfoRepository;
+import com.vitalsport.profile.service.info.StrengthInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
-@ContextConfiguration(classes = {ServiceTestConfiguration.class})
-public class StrengthInfoServiceTest  extends AbstractTestNGSpringContextTests {
+public class StrengthInfoServiceTest extends BaseServiceTest {
+
     @Autowired
     private StrengthInfoService strengthInfoService;
 
     @Autowired
-    private InfoRepository mockInfoRepository;
+    private StrengthInfoRepository mockStrengthInfoRepository;
 
-    @Test
-    public void strengthInfoIsSaved() {
-
-        MeasurementId measurementId = mock(MeasurementId.class);
-        StrengthInfo strengthInfo = mock(StrengthInfo.class);
-
-        strengthInfoService.save(measurementId, strengthInfo);
-
-        verify(mockInfoRepository, times(1)).save(strengthInfo);
+    @BeforeTest
+    public void before() {
+        mockStrengthInfoRepository = mock(StrengthInfoRepository.class);
+        strengthInfoService = new StrengthInfoService(mockStrengthInfoRepository);
     }
 
     @Test
-    public void strengthInfoIsReturnedByStrengthId() {
-        MeasurementId measurementId = mock(MeasurementId.class);
-        StrengthInfo strengthInfo = mock(StrengthInfo.class);
+    public void strengthInfoIsSaved() {
+        InfoId infoId = prepareInfoId(localDate, userId);
+        StrengthInfo strengthInfo = prepareStrengthInfo(infoId);
 
-        when(mockInfoRepository.findOne(measurementId)).thenReturn(strengthInfo);
-        StrengthInfo actualResult = strengthInfoService.get(measurementId);
+        strengthInfoService.save(infoId, strengthInfo);
 
-        verify(mockInfoRepository, times(1)).findOne(measurementId);
+        verify(mockStrengthInfoRepository, times(1)).save(strengthInfo);
+    }
+
+    @Test
+    public void strengthInfoIsReturnedByInfoId() {
+        InfoId infoId = prepareInfoId(localDate, userId);
+        StrengthInfo strengthInfo = prepareStrengthInfo(infoId);
+
+        when(mockStrengthInfoRepository.findOne(infoId)).thenReturn(strengthInfo);
+        StrengthInfo actualResult = strengthInfoService.get(infoId);
+
+        verify(mockStrengthInfoRepository, times(1)).findOne(infoId);
         assertThat(actualResult).isEqualToComparingFieldByField(strengthInfo);
     }
 
     @Test
     public void strengthInfoIsDeletedByStrengthId() {
-        MeasurementId measurementId = mock(MeasurementId.class);
+        InfoId infoId = prepareInfoId(localDate, userId);
 
-        strengthInfoService.delete(measurementId);
+        strengthInfoService.delete(infoId);
 
-        verify(mockInfoRepository, times(1)).delete(measurementId);
+        verify(mockStrengthInfoRepository, times(1)).delete(infoId);
     }
+
+    private StrengthInfo prepareStrengthInfo(InfoId infoId) {
+        StrengthInfo strengthInfo = new StrengthInfo();
+        strengthInfo.setId(infoId);
+        strengthInfo.setBenchPress(100);
+        strengthInfo.setLift(90);
+        strengthInfo.setSquat(60);
+        return strengthInfo;
+    }
+
 }

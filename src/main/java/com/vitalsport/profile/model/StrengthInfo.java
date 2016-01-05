@@ -10,10 +10,9 @@ import javax.persistence.Entity;
 public class StrengthInfo {
 
     @EmbeddedId
-    private MeasurementId id;
+    private InfoId id;
 
-    private String benchPress;
-    private String lift;
-    private String squat;
-//    private String weightMeasurement;
+    private int benchPress;
+    private int lift;
+    private int squat;
 }

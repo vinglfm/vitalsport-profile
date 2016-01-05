@@ -1,7 +1,7 @@
 package com.vitalsport.profile.web;
 
 import com.vitalsport.profile.model.UserInfo;
-import com.vitalsport.profile.service.UserInfoService;
+import com.vitalsport.profile.service.info.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import static com.vitalsport.profile.common.CommonUtils.decode;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.status;
 
 @Controller
 @RequestMapping(value = "/profile")
@@ -19,11 +22,11 @@ public class UserController {
     @Autowired
     private UserInfoService userInfoService;
 
-    @RequestMapping(value = "/info/{userId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/{userId}", method = RequestMethod.POST)
     public ResponseEntity<String> saveUserInfo(@PathVariable String userId,
                                                    @RequestBody UserInfo userInfo) {
         try {
-            userInfoService.save(userId, userInfo);
+            userInfoService.save(decode(userId), userInfo);
             return ok("User info has been saved.");
         } catch (IllegalArgumentException exception) {
             return badRequest().body(exception.toString());
@@ -31,23 +34,25 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/info/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
     public ResponseEntity<String> getUserInfo(@PathVariable String userId) {
 
         try {
-            UserInfo strengthInfo = userInfoService.get(userId);
+            UserInfo userInfo = userInfoService.get(decode(userId));
 
-            return ok(strengthInfo == null ? "" : strengthInfo.toString());
+            return userInfo == null ?
+                    status(NOT_FOUND).body("User info wasn't found for userId = " + userId)
+                    : ok(userInfo.toString());
         } catch (IllegalArgumentException exception) {
             return badRequest().body(exception.toString());
         }
     }
 
 
-    @RequestMapping(value = "/info/{userId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/user/{userId}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteUserInfo(@PathVariable String userId) {
         try {
-            userInfoService.delete(userId);
+            userInfoService.delete(decode(userId));
             return ok("User info has been deleted");
         } catch (IllegalArgumentException exception) {
             return badRequest().body(exception.toString());
