@@ -35,14 +35,14 @@ public class UserController {
 
 
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<String> getUserInfo(@PathVariable String userId) {
+    public ResponseEntity<?> getUserInfo(@PathVariable String userId) {
 
         try {
             UserInfo userInfo = userInfoService.get(decode(userId));
 
             return userInfo == null ?
                     status(NOT_FOUND).body("User info wasn't found for userId = " + userId)
-                    : ok(userInfo.toString());
+                    : ok(userInfo);
         } catch (IllegalArgumentException exception) {
             return badRequest().body(exception.toString());
         }

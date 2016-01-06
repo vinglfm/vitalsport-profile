@@ -42,14 +42,14 @@ public class StrengthController {
 
 
     @RequestMapping(value = "/strength/{userId}/{date}", method = RequestMethod.GET)
-    public ResponseEntity<String> getStrengthInfo(@PathVariable String userId, @PathVariable String date) {
+    public ResponseEntity<?> getStrengthInfo(@PathVariable String userId, @PathVariable String date) {
 
         try {
             StrengthInfo strengthInfo = strengthInfoService.get(prepareStrengthId(userId, date));
 
             return (strengthInfo == null ?
                     status(NOT_FOUND).body("Strength info wasn't found for userId = " + userId + " and date = " + date)
-                    : ok(strengthInfo.toString()));
+                    : ok(strengthInfo));
         } catch (DateTimeParseException exception) {
             return badRequest().body(String.format("date = %s has not valid format.", date));
         } catch (IllegalArgumentException exception) {

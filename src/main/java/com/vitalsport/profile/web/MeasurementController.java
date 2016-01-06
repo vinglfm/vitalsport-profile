@@ -37,13 +37,13 @@ public class MeasurementController {
     }
 
     @RequestMapping(value = "/measurements/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<String> getMeasurements(@PathVariable String userId) {
+    public ResponseEntity<?> getMeasurements(@PathVariable String userId) {
 
         try {
             Measurements measurements = measurementsService.get(decode(userId));
             return (measurements == null ?
                     status(NOT_FOUND).body("Measurements wasn't found for userId = " + userId )
-                    : ok(measurements.toString()));
+                    : ok(measurements));
         } catch (IllegalArgumentException exception) {
             return badRequest().body(exception.toString());
         }
