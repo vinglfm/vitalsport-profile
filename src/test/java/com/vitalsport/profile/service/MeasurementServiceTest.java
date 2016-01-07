@@ -31,21 +31,21 @@ public class MeasurementServiceTest extends BaseServiceTest {
     @Test
     public void measurementsInfoIsSaved() {
 
-        Measurements measurements = prepareMeasurements(userId);
+        Measurements measurements = prepareMeasurements(userId1);
 
-        measurementsService.update(userId, measurements);
+        measurementsService.update(userId1, measurements);
 
         verify(mockMeasurementRepository, times(1)).save(measurements);
     }
 
     @Test
     public void measurementsInfoIsReturnedByUserId() {
-        Measurements measurements = prepareMeasurements(userId);
+        Measurements measurements = prepareMeasurements(userId1);
 
-        when(mockMeasurementRepository.findOne(userId)).thenReturn(measurements);
-        Measurements actualResult = measurementsService.get(userId);
+        when(mockMeasurementRepository.findOne(userId1)).thenReturn(measurements);
+        Measurements actualResult = measurementsService.get(userId1);
 
-        verify(mockMeasurementRepository, times(1)).findOne(userId);
+        verify(mockMeasurementRepository, times(1)).findOne(userId1);
         assertThat(actualResult).isEqualToComparingFieldByField(measurements);
     }
 

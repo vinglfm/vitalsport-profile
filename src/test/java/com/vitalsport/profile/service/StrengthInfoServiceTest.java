@@ -27,7 +27,7 @@ public class StrengthInfoServiceTest extends BaseServiceTest {
 
     @Test
     public void strengthInfoIsSaved() {
-        InfoId infoId = prepareInfoId(localDate, userId);
+        InfoId infoId = prepareInfoId(userId1, localDate1);
         StrengthInfo strengthInfo = prepareStrengthInfo(infoId);
 
         strengthInfoService.save(infoId, strengthInfo);
@@ -37,7 +37,7 @@ public class StrengthInfoServiceTest extends BaseServiceTest {
 
     @Test
     public void strengthInfoIsReturnedByInfoId() {
-        InfoId infoId = prepareInfoId(localDate, userId);
+        InfoId infoId = prepareInfoId(userId1, localDate1);
         StrengthInfo strengthInfo = prepareStrengthInfo(infoId);
 
         when(mockStrengthInfoRepository.findOne(infoId)).thenReturn(strengthInfo);
@@ -49,7 +49,7 @@ public class StrengthInfoServiceTest extends BaseServiceTest {
 
     @Test
     public void strengthInfoIsDeletedByStrengthId() {
-        InfoId infoId = prepareInfoId(localDate, userId);
+        InfoId infoId = prepareInfoId(userId1, localDate1);
 
         strengthInfoService.delete(infoId);
 

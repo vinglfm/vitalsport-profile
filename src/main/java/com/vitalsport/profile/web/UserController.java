@@ -29,7 +29,7 @@ public class UserController {
             userInfoService.save(decode(userId), userInfo);
             return ok("User info has been saved.");
         } catch (IllegalArgumentException exception) {
-            return badRequest().body(exception.toString());
+            return badRequest().body(exception.getMessage());
         }
     }
 
@@ -44,7 +44,7 @@ public class UserController {
                     status(NOT_FOUND).body("User info wasn't found for userId = " + userId)
                     : ok(userInfo);
         } catch (IllegalArgumentException exception) {
-            return badRequest().body(exception.toString());
+            return badRequest().body(exception.getMessage());
         }
     }
 
@@ -55,7 +55,7 @@ public class UserController {
             userInfoService.delete(decode(userId));
             return ok("User info has been deleted");
         } catch (IllegalArgumentException exception) {
-            return badRequest().body(exception.toString());
+            return badRequest().body(exception.getMessage());
         }
     }
 

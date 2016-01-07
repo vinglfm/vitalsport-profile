@@ -16,6 +16,7 @@ import static com.vitalsport.profile.common.CommonUtils.decode;
 import static java.lang.String.format;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.ResponseEntity.*;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Slf4j
 @Controller
@@ -32,7 +33,7 @@ public class MeasurementController {
             measurementsService.update(decode(userId), measurements);
             return ok("User measurements has been saved.");
         } catch (IllegalArgumentException exception) {
-            return badRequest().body(exception.toString());
+            return badRequest().body(exception.getMessage());
         }
     }
 
@@ -45,7 +46,7 @@ public class MeasurementController {
                     status(NOT_FOUND).body("Measurements wasn't found for userId = " + userId )
                     : ok(measurements));
         } catch (IllegalArgumentException exception) {
-            return badRequest().body(exception.toString());
+            return badRequest().body(exception.getMessage());
         }
     }
 

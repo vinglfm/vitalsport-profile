@@ -27,30 +27,30 @@ public class UserInfoServiceTest extends BaseServiceTest {
     @Test
     public void userInfoIsSaved() {
 
-        UserInfo userInfo = prepareUser(userId);
+        UserInfo userInfo = prepareUser(userId1);
 
-        userInfoService.save(userId, userInfo);
+        userInfoService.save(userId1, userInfo);
 
         verify(mockUserInfoRepository, times(1)).save(userInfo);
     }
 
     @Test
     public void userInfoIsReturnedByUserId() {
-        UserInfo userInfo = prepareUser(userId);
+        UserInfo userInfo = prepareUser(userId1);
 
-        when(mockUserInfoRepository.findOne(userId)).thenReturn(userInfo);
-        UserInfo actualResult = userInfoService.get(userId);
+        when(mockUserInfoRepository.findOne(userId1)).thenReturn(userInfo);
+        UserInfo actualResult = userInfoService.get(userId1);
 
-        verify(mockUserInfoRepository, times(1)).findOne(userId);
+        verify(mockUserInfoRepository, times(1)).findOne(userId1);
         assertThat(actualResult).isEqualToComparingFieldByField(userInfo);
     }
 
     @Test
     public void userInfoIsDeletedByStrengthId() {
 
-        userInfoService.delete(userId);
+        userInfoService.delete(userId1);
 
-        verify(mockUserInfoRepository, times(1)).delete(userId);
+        verify(mockUserInfoRepository, times(1)).delete(userId1);
     }
 
     private UserInfo prepareUser(String userId) {

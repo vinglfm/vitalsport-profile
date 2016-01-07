@@ -15,6 +15,7 @@ import java.time.format.DateTimeParseException;
 
 import static com.vitalsport.profile.common.CommonUtils.decode;
 import static com.vitalsport.profile.common.CommonUtils.getMeasurementDate;
+import static java.lang.String.format;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
@@ -34,9 +35,9 @@ public class StrengthController {
             strengthInfoService.save(prepareStrengthId(userId, date), strengthInfo);
             return ok("User strength info has been saved.");
         } catch (DateTimeParseException exception) {
-            return badRequest().body(String.format("date = %s has not valid format.", date));
+            return badRequest().body(format("date = %s has not valid format.", date));
         } catch (IllegalArgumentException exception) {
-            return badRequest().body(exception.toString());
+            return badRequest().body(exception.getMessage());
         }
     }
 
@@ -51,9 +52,9 @@ public class StrengthController {
                     status(NOT_FOUND).body("Strength info wasn't found for userId = " + userId + " and date = " + date)
                     : ok(strengthInfo));
         } catch (DateTimeParseException exception) {
-            return badRequest().body(String.format("date = %s has not valid format.", date));
+            return badRequest().body(format("date = %s has not valid format.", date));
         } catch (IllegalArgumentException exception) {
-            return badRequest().body(exception.toString());
+            return badRequest().body(exception.getMessage());
         }
     }
 
@@ -64,9 +65,9 @@ public class StrengthController {
             strengthInfoService.delete(prepareStrengthId(userId, date));
             return ok("User strength info has been deleted");
         } catch (DateTimeParseException exception) {
-            return badRequest().body(String.format("date = %s has not valid format.", date));
+            return badRequest().body(format("date = %s has not valid format.", date));
         } catch (IllegalArgumentException exception) {
-            return badRequest().body(exception.toString());
+            return badRequest().body(exception.getMessage());
         }
     }
 

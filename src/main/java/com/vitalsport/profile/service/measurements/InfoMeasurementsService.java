@@ -31,7 +31,7 @@ public class InfoMeasurementsService implements MeasurementsService {
         measurements.setLength(MeasurementLengthUnit.CENTIMETER);
         measurements.setWeight(MeasurementWeightUnit.KILOGRAM);
 
-        log.info("Saving measurements for id = %s, body = %s", id, measurements);
+        log.info("Saving measurements for id = {}, body = {}", id, measurements);
 
         measurementRepository.save(measurements);
     }
@@ -48,7 +48,7 @@ public class InfoMeasurementsService implements MeasurementsService {
 
         measurements.setUserId(id);
 
-        log.info("Saving measurements for id = %s, body = %s", id, measurements);
+        log.info("Saving measurements for id = {}, body = {}", id, measurements);
         //TODO: need to update here
         measurementRepository.save(measurements);
     }
@@ -59,7 +59,7 @@ public class InfoMeasurementsService implements MeasurementsService {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
-        log.info("Retrieving measurements for id = %s", id);
+        log.info("Retrieving measurements for id = {}", id);
         return measurementRepository.findOne(id);
     }
 }

@@ -28,7 +28,7 @@ public class StrengthInfoService implements InfoService<InfoId, StrengthInfo> {
             throw new IllegalArgumentException("strengthInfo couldn't be null");
         }
 
-        log.info("Saving strengthInfo for id = %s, strength = %s", id, strengthInfo);
+        log.info("Saving strengthInfo for id = {}, strength = {}", id, strengthInfo);
 
         strengthInfo.setId(id);
         strengthInfoRepository.save(strengthInfo);
@@ -40,7 +40,7 @@ public class StrengthInfoService implements InfoService<InfoId, StrengthInfo> {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
-        log.info("Retrieving strengthInfo for id = %s", id);
+        log.info("Retrieving strengthInfo for id = {}", id);
 
         return strengthInfoRepository.findOne(id);
     }
@@ -51,7 +51,7 @@ public class StrengthInfoService implements InfoService<InfoId, StrengthInfo> {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
-        log.info("Deleting strengthInfo for id = %s", id);
+        log.info("Deleting strengthInfo for id = {}", id);
 
         strengthInfoRepository.delete(id);
     }
