@@ -16,8 +16,8 @@ public class Measurements {
     @Id
     private String userId;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private MeasurementWeightUnit weight;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private MeasurementLengthUnit length;
 }

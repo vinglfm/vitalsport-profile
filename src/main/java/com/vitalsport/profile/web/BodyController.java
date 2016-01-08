@@ -122,6 +122,6 @@ public class BodyController {
     }
 
     public static void main(String[] args) {
-        System.out.print(CommonUtils.encode("vinglfm@gmail.com"));
+        System.out.print(CommonUtils.encode("vinglfm1@gmail.com"));
     }
 }

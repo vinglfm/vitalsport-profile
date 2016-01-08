@@ -1,9 +1,11 @@
 package com.vitalsport.profile.model;
 
+import com.vitalsport.profile.common.Gender;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Collection;
 
 @Data
 @Entity
@@ -11,12 +13,15 @@ public class UserInfo {
     @Id
     private String email;
 
-    private String sex;
-    private String birthday;
+    @Enumerated(EnumType.ORDINAL)
+    private Gender gender;
+
+    private LocalDate birthday;
 
     private String countryCode;
 
     private String cityId;
 
-//    private List<String> fitnessClubId;
+    @ElementCollection(targetClass = String.class)
+    private Collection<String> fitnessClubs;
 }

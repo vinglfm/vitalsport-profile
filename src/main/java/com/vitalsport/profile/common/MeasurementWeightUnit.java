@@ -1,6 +1,7 @@
 package com.vitalsport.profile.common;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum MeasurementWeightUnit {
 
@@ -23,8 +24,8 @@ public enum MeasurementWeightUnit {
         return null;
     }
 
-    @Override
-    public String toString() {
+    @JsonValue
+    public String getLabel() {
         return label;
     }
 }
