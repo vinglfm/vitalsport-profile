@@ -1,6 +1,8 @@
 package com.vitalsport.profile.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vitalsport.profile.common.Gender;
+import com.vitalsport.profile.common.LocalDatePersistenceConverter;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,6 +18,8 @@ public class UserInfo {
     @Enumerated(EnumType.ORDINAL)
     private Gender gender;
 
+    @JsonFormat(pattern="yyyy-MM-dd")
+    @Convert(converter = LocalDatePersistenceConverter.class)
     private LocalDate birthday;
 
     private String countryCode;

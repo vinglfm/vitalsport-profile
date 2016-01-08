@@ -1,5 +1,6 @@
 package com.vitalsport.profile.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vitalsport.profile.common.LocalDatePersistenceConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +16,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Embeddable
 public class InfoId implements Serializable {
+
     private String userId;
+
+    @JsonFormat(pattern="yyyy-MM-dd")
     @Convert(converter = LocalDatePersistenceConverter.class)
     private LocalDate date;
 }
