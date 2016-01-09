@@ -17,7 +17,6 @@ import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
 
 @Controller
-@RequestMapping(value = "/profile")
 public class UserController {
     @Autowired
     private UserInfoService userInfoService;

@@ -1,5 +1,5 @@
 server:
-  contextPath: /vitalsport
+  contextPath: /vitalsport/profile
 spring:
   datasource:
     driverClassName: org.postgresql.Driver

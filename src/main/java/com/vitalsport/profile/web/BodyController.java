@@ -24,7 +24,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Slf4j
 @Controller
-@RequestMapping(value = "/profile")
 public class BodyController {
 
     @Autowired
