@@ -1,11 +1,12 @@
 package com.vitalsport.profile.service.measurements;
 
-import com.vitalsport.profile.common.MeasurementLengthUnit;
-import com.vitalsport.profile.common.MeasurementWeightUnit;
+import com.vitalsport.profile.common.LengthMeasurementUnit;
+import com.vitalsport.profile.common.WeightMeasurementUnit;
 import com.vitalsport.profile.model.Measurements;
 import com.vitalsport.profile.repository.MeasurementRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -14,9 +15,17 @@ public class InfoMeasurementsService implements MeasurementsService {
 
     private MeasurementRepository measurementRepository;
 
+    private LengthMeasurementUnit lengthUnit;
+    private WeightMeasurementUnit weightUnit;
+
+
     @Autowired
-    public InfoMeasurementsService(MeasurementRepository measurementRepository) {
+    public InfoMeasurementsService(MeasurementRepository measurementRepository,
+                                   @Value("${profile.measurement.length}") String lengthDefault,
+                                   @Value("${profile.measurement.weight}") String weightDefault) {
         this.measurementRepository = measurementRepository;
+        this.lengthUnit = LengthMeasurementUnit.fromCode(lengthDefault);
+        this.weightUnit = WeightMeasurementUnit.fromCode(weightDefault);
     }
 
     @Override
@@ -27,9 +36,8 @@ public class InfoMeasurementsService implements MeasurementsService {
 
         Measurements measurements = new Measurements();
         measurements.setUserId(id);
-        //TODO: move to properties
-        measurements.setLength(MeasurementLengthUnit.CENTIMETER);
-        measurements.setWeight(MeasurementWeightUnit.KILOGRAM);
+        measurements.setLength(lengthUnit);
+        measurements.setWeight(weightUnit);
 
         log.info("Saving measurements for id = {}, body = {}", id, measurements);
 
@@ -49,7 +57,6 @@ public class InfoMeasurementsService implements MeasurementsService {
         measurements.setUserId(id);
 
         log.info("Saving measurements for id = {}, body = {}", id, measurements);
-        //TODO: need to update here
         measurementRepository.save(measurements);
     }
 

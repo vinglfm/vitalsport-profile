@@ -13,10 +13,8 @@ import static org.mockito.Mockito.*;
 
 public class StrengthInfoServiceTest extends BaseServiceTest {
 
-    @Autowired
     private StrengthInfoService strengthInfoService;
 
-    @Autowired
     private StrengthInfoRepository mockStrengthInfoRepository;
 
     @BeforeTest

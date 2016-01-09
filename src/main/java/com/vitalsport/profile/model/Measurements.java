@@ -1,7 +1,7 @@
 package com.vitalsport.profile.model;
 
-import com.vitalsport.profile.common.MeasurementLengthUnit;
-import com.vitalsport.profile.common.MeasurementWeightUnit;
+import com.vitalsport.profile.common.LengthMeasurementUnit;
+import com.vitalsport.profile.common.WeightMeasurementUnit;
 import lombok.Data;
 
 import javax.persistence.EnumType;
@@ -17,7 +17,7 @@ public class Measurements {
     private String userId;
 
     @Enumerated(EnumType.ORDINAL)
-    private MeasurementWeightUnit weight;
+    private WeightMeasurementUnit weight;
     @Enumerated(EnumType.ORDINAL)
-    private MeasurementLengthUnit length;
+    private LengthMeasurementUnit length;
 }

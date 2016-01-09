@@ -1,31 +1,33 @@
 package com.vitalsport.profile.service;
 
-import com.vitalsport.profile.common.MeasurementLengthUnit;
-import com.vitalsport.profile.common.MeasurementWeightUnit;
 import com.vitalsport.profile.model.Measurements;
 import com.vitalsport.profile.repository.MeasurementRepository;
 import com.vitalsport.profile.service.measurements.InfoMeasurementsService;
 import com.vitalsport.profile.service.measurements.MeasurementsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import static com.vitalsport.profile.common.LengthMeasurementUnit.CENTIMETER;
+import static com.vitalsport.profile.common.LengthMeasurementUnit.INCH;
+import static com.vitalsport.profile.common.WeightMeasurementUnit.KILOGRAM;
+import static com.vitalsport.profile.common.WeightMeasurementUnit.POUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
 public class MeasurementServiceTest extends BaseServiceTest {
 
-    @Autowired
+    private String lengthDefault = CENTIMETER.getLabel();
+    private String weightDefault = KILOGRAM.getLabel();
+
     private MeasurementRepository mockMeasurementRepository;
 
-    @Autowired
     private MeasurementsService measurementsService;
 
     @BeforeTest
     public void before() {
         mockMeasurementRepository = mock(MeasurementRepository.class);
-        measurementsService = new InfoMeasurementsService(mockMeasurementRepository);
+        measurementsService = new InfoMeasurementsService(mockMeasurementRepository, lengthDefault, weightDefault);
     }
 
     @Test
@@ -52,8 +54,8 @@ public class MeasurementServiceTest extends BaseServiceTest {
     private Measurements prepareMeasurements(String userId) {
         Measurements measurements = new Measurements();
         measurements.setUserId(userId);
-        measurements.setLength(MeasurementLengthUnit.CENTIMETER);
-        measurements.setWeight(MeasurementWeightUnit.KILOGRAM);
+        measurements.setLength(INCH);
+        measurements.setWeight(POUND);
         return measurements;
     }
 

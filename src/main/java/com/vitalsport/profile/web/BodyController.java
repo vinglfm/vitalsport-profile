@@ -16,7 +16,6 @@ import java.time.format.DateTimeParseException;
 import static com.vitalsport.profile.common.CommonUtils.decode;
 import static com.vitalsport.profile.common.CommonUtils.getMeasurementDate;
 import static java.lang.Integer.valueOf;
-import static java.lang.String.format;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.ResponseEntity.*;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
@@ -56,11 +55,9 @@ public class BodyController {
                     : ok(bodyInfo));
         } catch (DateTimeParseException exception) {
             return badRequest()
-                    .contentType(MediaType.APPLICATION_JSON)
                     .body(String.format("date = %s has not valid format.", date));
         } catch (IllegalArgumentException exception) {
             return badRequest()
-                    .contentType(MediaType.APPLICATION_JSON)
                     .body(exception.getMessage());
         }
     }

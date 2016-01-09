@@ -3,20 +3,20 @@ package com.vitalsport.profile.common;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum MeasurementWeightUnit {
+public enum LengthMeasurementUnit {
 
-    POUND ("lb"),
-    KILOGRAM("kg");
+    CENTIMETER ("cm"),
+    INCH("in");
 
     private String label;
 
-    MeasurementWeightUnit (String label){
+    LengthMeasurementUnit(String label){
         this.label = label;
     }
 
     @JsonCreator
-    public static MeasurementWeightUnit fromCode(String code){
-        for(MeasurementWeightUnit measurementUnit : values()){
+    public static LengthMeasurementUnit fromCode(String code){
+        for(LengthMeasurementUnit measurementUnit : values()){
             if(measurementUnit.label.equals(code)){
                 return measurementUnit;
             }

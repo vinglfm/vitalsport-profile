@@ -12,6 +12,7 @@ import java.util.Collection;
 @Data
 @Entity
 public class UserInfo {
+    //TODO: add validation
     @Id
     private String email;
 

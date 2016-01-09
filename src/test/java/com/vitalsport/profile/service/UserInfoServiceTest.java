@@ -12,10 +12,8 @@ import static org.mockito.Mockito.*;
 
 public class UserInfoServiceTest extends BaseServiceTest {
 
-    @Autowired
     private UserInfoService userInfoService;
 
-    @Autowired
     private UserInfoRepository mockUserInfoRepository;
 
     @BeforeTest
