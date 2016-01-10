@@ -20,12 +20,13 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Slf4j
 @Controller
+@RequestMapping(value = "/measurements")
 public class MeasurementController {
 
     @Autowired
     private MeasurementsService measurementsService;
 
-    @RequestMapping(value = "/measurements/{userId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{userId}", method = RequestMethod.PUT)
     public ResponseEntity<String> saveMeasurements(@PathVariable String userId,
                                                @RequestBody Measurements measurements) {
         try {
@@ -36,7 +37,7 @@ public class MeasurementController {
         }
     }
 
-    @RequestMapping(value = "/measurements/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public ResponseEntity<?> getMeasurements(@PathVariable String userId) {
 
         try {

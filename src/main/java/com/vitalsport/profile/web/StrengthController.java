@@ -22,12 +22,13 @@ import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
 
 @Controller
+@RequestMapping(value = "/strength")
 public class StrengthController {
 
     @Autowired
     private StrengthInfoService strengthInfoService;
 
-    @RequestMapping(value = "/strength/{userId}/{date}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{userId}/{date}", method = RequestMethod.POST)
     public ResponseEntity<String> saveStrengthInfo(@PathVariable String userId, @PathVariable String date,
                                                @RequestBody StrengthInfo strengthInfo) {
         try {
@@ -41,7 +42,7 @@ public class StrengthController {
     }
 
 
-    @RequestMapping(value = "/strength/{userId}/{date}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{userId}/{date}", method = RequestMethod.GET)
     public ResponseEntity<?> getStrengthInfo(@PathVariable String userId, @PathVariable String date) {
 
         try {
@@ -58,7 +59,7 @@ public class StrengthController {
     }
 
 
-    @RequestMapping(value = "/strength/{userId}/{date}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{userId}/{date}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteStrengthInfo(@PathVariable String userId, @PathVariable String date) {
         try {
             strengthInfoService.delete(prepareStrengthId(userId, date));

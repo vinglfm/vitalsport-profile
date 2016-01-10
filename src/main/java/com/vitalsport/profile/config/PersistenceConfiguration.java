@@ -28,5 +28,4 @@ public class PersistenceConfiguration {
         jpaTransactionManager.setDataSource(dataSource);
         return jpaTransactionManager;
     }
-
 }

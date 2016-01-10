@@ -17,11 +17,12 @@ import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
 
 @Controller
+@RequestMapping(value = "/user")
 public class UserController {
     @Autowired
     private UserInfoService userInfoService;
 
-    @RequestMapping(value = "/user/{userId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
     public ResponseEntity<String> saveUserInfo(@PathVariable String userId,
                                                    @RequestBody UserInfo userInfo) {
         try {
@@ -31,7 +32,6 @@ public class UserController {
             return badRequest().body(exception.getMessage());
         }
     }
-
 
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
     public ResponseEntity<?> getUserInfo(@PathVariable String userId) {
@@ -46,7 +46,6 @@ public class UserController {
             return badRequest().body(exception.getMessage());
         }
     }
-
 
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteUserInfo(@PathVariable String userId) {
