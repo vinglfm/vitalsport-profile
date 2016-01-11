@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Collection;
 
 import static java.time.LocalDate.of;
@@ -31,11 +32,11 @@ public class BodyInfoService implements InfoService<InfoId, BodyInfo>, DateServi
     //TODO: do rollback
     @Override
     public void save(InfoId id, BodyInfo bodyInfo) {
-        if(id == null) {
+        if (id == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
-        if(bodyInfo == null) {
+        if (bodyInfo == null) {
             throw new IllegalArgumentException("bodyInfo couldn't be null");
         }
 
@@ -48,7 +49,7 @@ public class BodyInfoService implements InfoService<InfoId, BodyInfo>, DateServi
 
     @Override
     public BodyInfo get(InfoId id) {
-        if(id == null) {
+        if (id == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
@@ -59,7 +60,7 @@ public class BodyInfoService implements InfoService<InfoId, BodyInfo>, DateServi
 
     @Override
     public void delete(InfoId id) {
-        if(id == null) {
+        if (id == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
@@ -70,7 +71,7 @@ public class BodyInfoService implements InfoService<InfoId, BodyInfo>, DateServi
 
     @Override
     public Collection<String> getMeasurementDates(String userId) {
-        if(userId == null) {
+        if (userId == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
@@ -80,7 +81,7 @@ public class BodyInfoService implements InfoService<InfoId, BodyInfo>, DateServi
     }
 
     public Collection<Integer> getMeasurementYears(String userId) {
-        if(userId == null) {
+        if (userId == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
@@ -90,11 +91,11 @@ public class BodyInfoService implements InfoService<InfoId, BodyInfo>, DateServi
     }
 
     public Collection<Integer> getMeasurementMonth(String userId, int year) {
-        if(userId == null) {
+        if (userId == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
-        if(year < MIN_YEAR) {
+        if (year < MIN_YEAR) {
             throw new IllegalArgumentException("year couldn't be less then " + MIN_YEAR);
         }
 
@@ -105,16 +106,18 @@ public class BodyInfoService implements InfoService<InfoId, BodyInfo>, DateServi
     }
 
     public Collection<Integer> getMeasurementDays(String userId, int year, int month) {
-        if(userId == null) {
+        if (userId == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
-        if(year < MIN_YEAR) {
+        if (year < MIN_YEAR) {
             throw new IllegalArgumentException("year couldn't be less then " + MIN_YEAR);
         }
 
         log.info("Finding all measurement days for id = {}, year = {}, month = {}", userId, year, month);
 
-        return bodyInfoRepository.findMeasurementDays(userId, of(year, month, 1), of(year + 1, month, 1));
+        LocalDate startDate = of(year, month, 1);
+        LocalDate endDate = startDate.plusMonths(1);
+        return bodyInfoRepository.findMeasurementDays(userId, startDate, endDate);
     }
 }

@@ -1,0 +1,10 @@
+<dataset>
+    <BodyInfo userId="first@gmail.com" date="2013-08-15" neck="30" chest="0" waist="0" biceps="0" forearm="0" wrist="0" hip="0" thigh="0" gastrocnemius="0" ankle="0" height="0" weight="0" fatPercentage="0"/>
+    <BodyInfo userId="first@gmail.com" date="2014-05-06" neck="31" chest="0" waist="0" biceps="0" forearm="0" wrist="0" hip="0" thigh="0" gastrocnemius="0" ankle="0" height="0" weight="0" fatPercentage="0"/>
+    <BodyInfo userId="first@gmail.com" date="2014-05-08" neck="32" chest="0" waist="0" biceps="0" forearm="0" wrist="0" hip="0" thigh="0" gastrocnemius="0" ankle="0" height="0" weight="0" fatPercentage="0"/>
+    <BodyInfo userId="first@gmail.com" date="2015-09-25" neck="35" chest="0" waist="0" biceps="0" forearm="0" wrist="0" hip="0" thigh="0" gastrocnemius="0" ankle="0" height="0" weight="0" fatPercentage="0"/>
+    <BodyInfo userId="first@gmail.com" date="2015-10-19" neck="35" chest="75" waist="0" biceps="0" forearm="0" wrist="0" hip="0" thigh="0" gastrocnemius="0" ankle="0" height="0" weight="0" fatPercentage="0"/>
+    <BodyInfo userId="second@gmail.com" date="2013-09-12" neck="26" chest="0" waist="0" biceps="0" forearm="0" wrist="0" hip="0" thigh="0" gastrocnemius="0" ankle="0" height="0" weight="0" fatPercentage="0"/>
+    <BodyInfo userId="second@gmail.com" date="2014-05-09" neck="28" chest="0" waist="0" biceps="0" forearm="0" wrist="0" hip="0" thigh="0" gastrocnemius="0" ankle="0" height="0" weight="0" fatPercentage="0"/>
+    <BodyInfo userId="second@gmail.com" date="2015-01-01" neck="29" chest="0" waist="0" biceps="0" forearm="0" wrist="0" hip="0" thigh="0" gastrocnemius="0" ankle="0" height="0" weight="0" fatPercentage="0"/>
+</dataset>

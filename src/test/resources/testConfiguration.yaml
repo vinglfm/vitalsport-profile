@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driverClassName: org.h2.Driver
+    jdbcUrl: jdbc:h2:mem:datajpa
+    username: sa
+    password:
+hibernate:
+  ddl-auto: create
+  dialect: org.hibernate.dialect.H2Dialect
+  show_sql: true

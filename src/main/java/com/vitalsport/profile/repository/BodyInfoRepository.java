@@ -19,7 +19,7 @@ public interface BodyInfoRepository extends JpaRepository<BodyInfo, InfoId> {
 
     @Query("SELECT DISTINCT EXTRACT (month FROM bi.id.date) as month FROM BodyInfo bi " +
             "WHERE bi.id.userId = ?1 AND bi.id.date >= ?2 AND bi.id.date < ?3 ORDER BY month ASC")
-    Collection<Integer> findMeasurementMonth(String userId, LocalDate before, LocalDate after);
+    Collection<Integer> findMeasurementMonth(String userId, LocalDate startDate, LocalDate endDate);
 
     @Query("SELECT DISTINCT EXTRACT (day FROM bi.id.date) as day FROM BodyInfo bi " +
             "WHERE bi.id.userId = ?1 AND bi.id.date >= ?2 AND bi.id.date < ?3 ORDER BY day ASC")
