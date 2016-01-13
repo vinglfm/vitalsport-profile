@@ -3,7 +3,7 @@ package db.repository;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.vitalsport.profile.repository.BodyInfoRepository;
-import db.configuration.PersistenceConfiguration;
+import db.configuration.TestConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -16,7 +16,7 @@ import static java.time.LocalDate.of;
 import static java.time.Month.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ContextConfiguration(classes = {PersistenceConfiguration.class})
+@ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class, DbUnitTestExecutionListener.class})
 @DatabaseSetup("/bodyInfoData.xml")

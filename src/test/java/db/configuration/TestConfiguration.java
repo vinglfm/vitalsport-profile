@@ -21,7 +21,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.vitalsport.profile.repository")
-public class PersistenceConfiguration {
+public class TestConfiguration {
 
     private static final String HIBERNATE_DIALECT = "hibernate.dialect";
     private static final String HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";

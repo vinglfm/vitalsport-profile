@@ -118,7 +118,7 @@ public class BodyInfoServiceTest extends BaseServiceTest {
         int year = 2015;
         int month = 10;
         LocalDate startDate = of(year, month, 1);
-        LocalDate endDate = of(year + 1, month, 1);
+        LocalDate endDate = of(year, month + 1, 1);
 
         Collection<Integer> expectedResult = asList(10, 11);
         when(mockBodyInfoRepository.findMeasurementDays(userId1, startDate, endDate)).thenReturn(expectedResult);
