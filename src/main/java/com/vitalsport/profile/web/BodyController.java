@@ -5,6 +5,7 @@ import com.vitalsport.profile.model.BodyInfo;
 import com.vitalsport.profile.service.info.BodyInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class BodyController {
 
             return ok("User body info has been saved.");
         } catch (DateTimeParseException exception) {
-            return badRequest().body(String.format("date = %s has not valid format.", date));
+            return badRequest().body(String.format("date = %s has an invalid format.", date));
         } catch (IllegalArgumentException exception) {
             return badRequest().body(exception.getMessage());
         }
@@ -53,7 +54,7 @@ public class BodyController {
                     : ok(bodyInfo));
         } catch (DateTimeParseException exception) {
             return badRequest()
-                    .body(String.format("date = %s has not valid format.", date));
+                    .body(String.format("date = %s has an invalid format.", date));
         } catch (IllegalArgumentException exception) {
             return badRequest()
                     .body(exception.getMessage());
@@ -64,9 +65,11 @@ public class BodyController {
     public ResponseEntity<String> deleteBodyInfo(@PathVariable String userId, @PathVariable String date) {
         try {
             bodyInfoService.delete(prepareBodyId(userId, date));
-            return ok("User body info has been deleted");
+            return ok("Delete has been applied.");
+        } catch (EmptyResultDataAccessException exception) {
+            return status(NOT_FOUND).body(String.format("Body info for userId = %s and date = %s wasn't found.", userId, date));
         } catch (DateTimeParseException exception) {
-            return badRequest().body(String.format("date = %s has not valid format.", date));
+            return badRequest().body(String.format("date = %s has an invalid format.", date));
         } catch (IllegalArgumentException exception) {
             return badRequest().body(exception.getMessage());
         }
