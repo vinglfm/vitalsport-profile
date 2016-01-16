@@ -1,14 +1,9 @@
 package com.vitalsport.profile.service;
 
-import com.vitalsport.profile.common.LengthMeasurementUnit;
-import com.vitalsport.profile.common.WeightMeasurementUnit;
 import com.vitalsport.profile.model.InfoId;
 import com.vitalsport.profile.model.BodyInfo;
-import com.vitalsport.profile.model.Measurements;
 import com.vitalsport.profile.repository.BodyInfoRepository;
-import com.vitalsport.profile.repository.MeasurementRepository;
 import com.vitalsport.profile.service.info.BodyInfoService;
-import com.vitalsport.profile.service.measurements.InfoMeasurementsService;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -16,31 +11,21 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.Collection;
 
-import static com.vitalsport.profile.common.LengthMeasurementUnit.CENTIMETER;
-import static com.vitalsport.profile.common.WeightMeasurementUnit.KILOGRAM;
 import static java.time.LocalDate.*;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 public class BodyInfoServiceTest extends BaseServiceTest {
-
-    private String lengthDefault = CENTIMETER.getLabel();
-    private String weightDefault = KILOGRAM.getLabel();
 
     private BodyInfoService bodyInfoService;
 
     private BodyInfoRepository mockBodyInfoRepository;
 
-    private MeasurementRepository mockMeasurementRepository;
-
     @BeforeTest
     public void before() {
-        mockMeasurementRepository = mock(MeasurementRepository.class);
         mockBodyInfoRepository = mock(BodyInfoRepository.class);
-        bodyInfoService = new BodyInfoService(mockBodyInfoRepository,
-                new InfoMeasurementsService(mockMeasurementRepository, lengthDefault, weightDefault));
+        bodyInfoService = new BodyInfoService(mockBodyInfoRepository);
     }
 
     @Test
@@ -48,12 +33,10 @@ public class BodyInfoServiceTest extends BaseServiceTest {
 
         InfoId infoId = prepareInfoId(userId1, localDate1);
         BodyInfo bodyInfo = prepareBodyInfo(infoId);
-        Measurements measurements = prepareMeasurements(userId1);
 
         bodyInfoService.save(infoId, bodyInfo);
 
         verify(mockBodyInfoRepository, times(1)).save(bodyInfo);
-        verify(mockMeasurementRepository, times(1)).save(measurements);
     }
 
     @Test
@@ -136,13 +119,5 @@ public class BodyInfoServiceTest extends BaseServiceTest {
         bodyInfo.setChest(60);
         bodyInfo.setFatPercentage(18);
         return bodyInfo;
-    }
-
-    private Measurements prepareMeasurements(String userId) {
-        Measurements measurements = new Measurements();
-        measurements.setUserId(userId);
-        measurements.setLength(LengthMeasurementUnit.fromCode(lengthDefault));
-        measurements.setWeight(WeightMeasurementUnit.fromCode(weightDefault));
-        return measurements;
     }
 }

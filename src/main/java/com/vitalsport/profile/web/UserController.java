@@ -33,7 +33,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public ResponseEntity<?> getUserInfo(@PathVariable String userId) {
 
         try {
@@ -47,7 +47,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/user/{userId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteUserInfo(@PathVariable String userId) {
         try {
             userInfoService.delete(decode(userId));

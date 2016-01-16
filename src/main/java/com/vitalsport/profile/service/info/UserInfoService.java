@@ -2,6 +2,7 @@ package com.vitalsport.profile.service.info;
 
 import com.vitalsport.profile.model.UserInfo;
 import com.vitalsport.profile.repository.UserInfoRepository;
+import com.vitalsport.profile.service.measurements.InfoMeasurementsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,9 +13,12 @@ public class UserInfoService implements InfoService<String, UserInfo> {
 
     private UserInfoRepository infoRepository;
 
+    private InfoMeasurementsService infoMeasurementsService;
+
     @Autowired
-    public UserInfoService(UserInfoRepository infoRepository) {
+    public UserInfoService(UserInfoRepository infoRepository, InfoMeasurementsService infoMeasurementsService) {
         this.infoRepository = infoRepository;
+        this.infoMeasurementsService = infoMeasurementsService;
     }
 
     @Override
@@ -28,8 +32,11 @@ public class UserInfoService implements InfoService<String, UserInfo> {
         }
 
         log.info("Saving userInfo for id = %s, userInfo = %s", id, userInfo);
+
         userInfo.setEmail(id);
+
         infoRepository.save(userInfo);
+        infoMeasurementsService.init(id);
     }
 
     @Override

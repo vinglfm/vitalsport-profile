@@ -21,12 +21,9 @@ public class BodyInfoService implements InfoService<InfoId, BodyInfo>, DateServi
     public static final int MIN_YEAR = 1990;
     private BodyInfoRepository bodyInfoRepository;
 
-    private InfoMeasurementsService infoMeasurementsService;
-
     @Autowired
-    public BodyInfoService(BodyInfoRepository bodyInfoRepository, InfoMeasurementsService infoMeasurementsService) {
+    public BodyInfoService(BodyInfoRepository bodyInfoRepository) {
         this.bodyInfoRepository = bodyInfoRepository;
-        this.infoMeasurementsService = infoMeasurementsService;
     }
 
     //TODO: do rollback
@@ -44,7 +41,6 @@ public class BodyInfoService implements InfoService<InfoId, BodyInfo>, DateServi
 
         log.info("Saving bodyInfo for id = {}, body = {}", id, bodyInfo);
         bodyInfoRepository.save(bodyInfo);
-        infoMeasurementsService.init(id.getUserId());
     }
 
     @Override

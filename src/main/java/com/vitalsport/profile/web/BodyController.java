@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeParseException;
+import java.util.Collection;
 
 import static com.vitalsport.profile.common.CommonUtils.decode;
 import static com.vitalsport.profile.common.CommonUtils.getMeasurementDate;
@@ -76,9 +77,10 @@ public class BodyController {
     }
 
     @RequestMapping(value = "/{userId}/allMeasurementDates", method = GET)
-    public ResponseEntity<?> getAllMeasurementDates (@PathVariable("userId") String encodedUserId) {
+    public ResponseEntity<String> getAllMeasurementDates (@PathVariable("userId") String encodedUserId) {
         try {
-            return ok(bodyInfoService.getMeasurementDates(decode(encodedUserId)));
+            Collection<String> measurementDates = bodyInfoService.getMeasurementDates(decode(encodedUserId));
+            return ok(measurementDates.toString());
         } catch (IllegalArgumentException exception) {
             return badRequest().body(exception.getMessage());
         }
@@ -98,6 +100,8 @@ public class BodyController {
                                           @PathVariable("year") String measurementYear) {
         try {
             return ok(bodyInfoService.getMeasurementMonth(decode(encodedUserId), valueOf(measurementYear)));
+        } catch (NumberFormatException exception) {
+            return badRequest().body(String.format("Year = %s has an invalid format.", measurementYear));
         } catch (IllegalArgumentException exception) {
             return badRequest().body(exception.getMessage());
         }
@@ -110,7 +114,9 @@ public class BodyController {
         try {
             return ok(bodyInfoService.getMeasurementDays(decode(encodedUserId),
                             valueOf(measurementYear), valueOf(measurementMonth)));
-        } catch (Exception exception) {
+        } catch (NumberFormatException exception) {
+            return badRequest().body(String.format("Year = %s or Month = % has an invalid format.", measurementYear, measurementMonth));
+        } catch (IllegalArgumentException exception) {
             return badRequest().body(exception.toString());
         }
     }

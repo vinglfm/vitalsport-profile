@@ -1,0 +1,15 @@
+{
+  "neck" : 30.0,
+  "chest" : 98.0,
+  "waist" : 46.0,
+  "biceps" : 39.0,
+  "forearm" : 26.0,
+  "wrist" : 10.0,
+  "hip" : 36.0,
+  "thigh" : 18.0,
+  "gastrocnemius" : 0.0,
+  "ankle" : 18.0,
+  "height" : 179.0,
+  "weight" : 78.0,
+  "fatPercentage" : 18
+}
