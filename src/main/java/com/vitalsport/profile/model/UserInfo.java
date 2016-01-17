@@ -1,6 +1,7 @@
 package com.vitalsport.profile.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vitalsport.profile.common.Gender;
 import com.vitalsport.profile.common.LocalDatePersistenceConverter;
 import lombok.Data;
@@ -11,6 +12,7 @@ import java.util.Collection;
 
 @Data
 @Entity
+@JsonIgnoreProperties({"email"})
 public class UserInfo {
     //TODO: add validation
     @Id

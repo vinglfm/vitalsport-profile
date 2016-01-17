@@ -1,0 +1,7 @@
+{
+  "gender": "M",
+  "birthday": "1991-12-16",
+  "countryCode": "UK",
+  "cityId": "some_city_id2",
+  "fitnessClubs": ["1261", "3267", "3385"]
+}

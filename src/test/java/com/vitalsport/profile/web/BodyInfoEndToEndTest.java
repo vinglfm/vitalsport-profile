@@ -72,7 +72,7 @@ public class BodyInfoEndToEndTest extends BaseEndToEndTest {
     }
 
     @Test
-    public void getReturnsBodyInfoForCorrectUserIdAndMeasurementDate() throws IOException {
+    public void getReturnsBodyInfoForCorrectUserIdAndMeasurementDate() {
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1);
 

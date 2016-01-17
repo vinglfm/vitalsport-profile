@@ -4,6 +4,7 @@ import com.vitalsport.profile.model.InfoId;
 import com.vitalsport.profile.model.StrengthInfo;
 import com.vitalsport.profile.service.info.StrengthInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,12 +36,11 @@ public class StrengthController {
             strengthInfoService.save(prepareStrengthId(userId, date), strengthInfo);
             return ok("User strength info has been saved.");
         } catch (DateTimeParseException exception) {
-            return badRequest().body(format("date = %s has not valid format.", date));
+            return badRequest().body(format("date = %s has an invalid format.", date));
         } catch (IllegalArgumentException exception) {
             return badRequest().body(exception.getMessage());
         }
     }
-
 
     @RequestMapping(value = "/{userId}/{date}", method = RequestMethod.GET)
     public ResponseEntity<?> getStrengthInfo(@PathVariable String userId, @PathVariable String date) {
@@ -52,20 +52,21 @@ public class StrengthController {
                     status(NOT_FOUND).body("Strength info wasn't found for userId = " + userId + " and date = " + date)
                     : ok(strengthInfo));
         } catch (DateTimeParseException exception) {
-            return badRequest().body(format("date = %s has not valid format.", date));
+            return badRequest().body(format("date = %s has an invalid format.", date));
         } catch (IllegalArgumentException exception) {
             return badRequest().body(exception.getMessage());
         }
     }
 
-
     @RequestMapping(value = "/{userId}/{date}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteStrengthInfo(@PathVariable String userId, @PathVariable String date) {
         try {
             strengthInfoService.delete(prepareStrengthId(userId, date));
-            return ok("User strength info has been deleted");
+            return ok("Delete has been applied.");
         } catch (DateTimeParseException exception) {
-            return badRequest().body(format("date = %s has not valid format.", date));
+            return badRequest().body(format("date = %s has an invalid format.", date));
+        } catch (EmptyResultDataAccessException exception) {
+            return status(NOT_FOUND).body(String.format("Strength info for userId = %s and date = %s wasn't found.", userId, date));
         } catch (IllegalArgumentException exception) {
             return badRequest().body(exception.getMessage());
         }
