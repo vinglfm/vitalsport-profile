@@ -1,5 +1,6 @@
 server:
   contextPath: /vitalsport/profile
+  port: 8081
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
