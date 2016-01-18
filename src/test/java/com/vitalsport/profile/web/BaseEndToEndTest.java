@@ -1,10 +1,12 @@
 package com.vitalsport.profile.web;
 
+import com.jayway.restassured.RestAssured;
 import com.vitalsport.profile.ProfileApplication;
 import com.vitalsport.profile.repository.BodyInfoRepository;
 import org.aspectj.lang.annotation.After;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -12,6 +14,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.testng.annotations.BeforeClass;
 import org.testng.reporters.Files;
 
 import java.io.File;
@@ -44,6 +47,14 @@ public class BaseEndToEndTest extends AbstractTestNGSpringContextTests {
     protected final LocalDate localMeasurementDate2 = of(year, month2, day2);
     protected final String measurementDate2 = localMeasurementDate2.toString();
     protected final String invalidFormattedDate = "20130621";
+
+    @Value("${server.port}")
+    private String port;
+
+    @BeforeClass
+    public void setUp() {
+        RestAssured.port = Integer.parseInt(port);
+    }
 
     protected final String prepareJson(String path) {
         try {
