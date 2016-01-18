@@ -3,15 +3,15 @@ server:
   port: 8081
 spring:
   datasource:
-    driverClassName: org.postgresql.Driver
-    jdbcUrl: jdbc:postgresql://localhost:5432/vitalsport
-    username: postgres
-    password: postgres
+    driverClassName: com.mysql.jdbc.Driver
+    jdbcUrl: jdbc:mysql://localhost:3306/vitalsport
+    username: vitalsport
+    password: vitalsport
   jpa:
     hibernate.ddl-auto: create
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.MySQLDialect
         show_sql: false
         cache:
           use_second_level_cache: false
