@@ -16,9 +16,11 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Controller
 @RequestMapping(value = "/user")
+@CrossOrigin(origins = "*")
 public class UserController {
     @Autowired
     private UserInfoService userInfoService;
