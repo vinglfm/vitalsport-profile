@@ -21,10 +21,12 @@ import static org.springframework.http.ResponseEntity.*;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Slf4j
 @Controller
 @RequestMapping(value = "/body")
+@CrossOrigin(origins = "*")
 public class BodyController {
 
     @Autowired
