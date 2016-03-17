@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.time.format.DateTimeParseException;
 
@@ -24,6 +25,7 @@ import static org.springframework.http.ResponseEntity.status;
 
 @Controller
 @RequestMapping(value = "/strength")
+@CrossOrigin(origins = "*")
 public class StrengthController {
 
     @Autowired
