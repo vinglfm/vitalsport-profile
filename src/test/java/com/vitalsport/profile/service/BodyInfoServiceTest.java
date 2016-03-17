@@ -53,6 +53,18 @@ public class BodyInfoServiceTest extends BaseServiceTest {
     }
 
     @Test
+    public void latestBodyInfoIsReturnedByUserId() {
+        prepareBodyInfo(prepareInfoId(userId1, localDate1));
+        BodyInfo expectedResult = prepareBodyInfo(prepareInfoId(userId1, localDate2));
+
+        when(mockBodyInfoRepository.findTopByIdUserIdOrderByIdDateDesc(userId1)).thenReturn(expectedResult);
+        BodyInfo actualResult = bodyInfoService.getLatest(userId1);
+
+        verify(mockBodyInfoRepository, times(1)).findTopByIdUserIdOrderByIdDateDesc(userId1);
+        assertThat(actualResult).isEqualToComparingFieldByField(expectedResult);
+    }
+
+    @Test
     public void bodyInfoIsDeletedByBodyId() {
         InfoId infoId = prepareInfoId(userId1, localDate1);
 

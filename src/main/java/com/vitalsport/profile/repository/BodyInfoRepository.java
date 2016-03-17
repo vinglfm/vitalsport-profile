@@ -10,6 +10,8 @@ import java.util.Collection;
 
 public interface BodyInfoRepository extends JpaRepository<BodyInfo, InfoId> {
 
+    BodyInfo findTopByIdUserIdOrderByIdDateDesc(String userId);
+
     @Query("SELECT bi.id.date FROM BodyInfo bi WHERE bi.id.userId = ?1")
     Collection<String> findMeasurementDates(String userId);
 

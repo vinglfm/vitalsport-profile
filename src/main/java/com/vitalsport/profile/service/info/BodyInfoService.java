@@ -3,7 +3,6 @@ package com.vitalsport.profile.service.info;
 import com.vitalsport.profile.model.InfoId;
 import com.vitalsport.profile.model.BodyInfo;
 import com.vitalsport.profile.repository.BodyInfoRepository;
-import com.vitalsport.profile.service.measurements.InfoMeasurementsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +15,11 @@ import static java.time.Month.JANUARY;
 
 @Slf4j
 @Service
-public class BodyInfoService implements InfoService<InfoId, BodyInfo>, DateService {
+public class BodyInfoService implements InfoService<InfoId, BodyInfo>,
+        LatestMeasurementProvider<String, BodyInfo>, DateService {
 
-    public static final int MIN_YEAR = 1990;
+    //TODO: move to properties
+    private static final int MIN_YEAR = 1990;
     private BodyInfoRepository bodyInfoRepository;
 
     @Autowired
@@ -39,7 +40,7 @@ public class BodyInfoService implements InfoService<InfoId, BodyInfo>, DateServi
 
         bodyInfo.setId(id);
 
-        log.info("Saving bodyInfo for id = {}, body = {}", id, bodyInfo);
+        log.debug("Saving bodyInfo for id = {}, body = {}", id, bodyInfo);
         bodyInfoRepository.save(bodyInfo);
     }
 
@@ -49,20 +50,20 @@ public class BodyInfoService implements InfoService<InfoId, BodyInfo>, DateServi
             throw new IllegalArgumentException("id couldn't be null");
         }
 
-        log.info("Retrieving bodyInfo for id = {}", id);
+        log.debug("Retrieving bodyInfo for id = {}", id);
 
         return bodyInfoRepository.findOne(id);
     }
 
     @Override
-    public void delete(InfoId id) {
+    public BodyInfo getLatest(String id) {
         if (id == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
-        log.info("Deleting bodyInfo for id = {}", id);
+        log.debug("Retrieving latest bodyInfo for id = {}", id);
 
-        bodyInfoRepository.delete(id);
+        return bodyInfoRepository.findTopByIdUserIdOrderByIdDateDesc(id);
     }
 
     @Override
@@ -71,21 +72,23 @@ public class BodyInfoService implements InfoService<InfoId, BodyInfo>, DateServi
             throw new IllegalArgumentException("id couldn't be null");
         }
 
-        log.info("Finding all measurement dates for userId = {}", userId);
+        log.debug("Finding all measurement dates for userId = {}", userId);
 
         return bodyInfoRepository.findMeasurementDates(userId);
     }
 
+    @Override
     public Collection<Integer> getMeasurementYears(String userId) {
         if (userId == null) {
             throw new IllegalArgumentException("id couldn't be null");
         }
 
-        log.info("Finding all measurement years for userId = {}", userId);
+        log.debug("Finding all measurement years for userId = {}", userId);
 
         return bodyInfoRepository.findMeasurementYears(userId);
     }
 
+    @Override
     public Collection<Integer> getMeasurementMonth(String userId, int year) {
         if (userId == null) {
             throw new IllegalArgumentException("id couldn't be null");
@@ -95,12 +98,13 @@ public class BodyInfoService implements InfoService<InfoId, BodyInfo>, DateServi
             throw new IllegalArgumentException("year couldn't be less then " + MIN_YEAR);
         }
 
-        log.info("Finding all measurement month for id = {}, year = {}", userId, year);
+        log.debug("Finding all measurement month for id = {}, year = {}", userId, year);
 
         return bodyInfoRepository.findMeasurementMonth(userId,
                 of(year, JANUARY, 1), of(year + 1, JANUARY, 1));
     }
 
+    @Override
     public Collection<Integer> getMeasurementDays(String userId, int year, int month) {
         if (userId == null) {
             throw new IllegalArgumentException("id couldn't be null");
@@ -110,10 +114,21 @@ public class BodyInfoService implements InfoService<InfoId, BodyInfo>, DateServi
             throw new IllegalArgumentException("year couldn't be less then " + MIN_YEAR);
         }
 
-        log.info("Finding all measurement days for id = {}, year = {}, month = {}", userId, year, month);
+        log.debug("Finding all measurement days for id = {}, year = {}, month = {}", userId, year, month);
 
         LocalDate startDate = of(year, month, 1);
         LocalDate endDate = startDate.plusMonths(1);
         return bodyInfoRepository.findMeasurementDays(userId, startDate, endDate);
+    }
+
+    @Override
+    public void delete(InfoId id) {
+        if (id == null) {
+            throw new IllegalArgumentException("id couldn't be null");
+        }
+
+        log.debug("Deleting bodyInfo for id = {}", id);
+
+        bodyInfoRepository.delete(id);
     }
 }

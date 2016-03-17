@@ -1,5 +1,6 @@
 package com.vitalsport.profile.web;
 
+import com.vitalsport.profile.model.BodyInfo;
 import com.vitalsport.profile.model.InfoId;
 import com.vitalsport.profile.model.StrengthInfo;
 import com.vitalsport.profile.service.info.StrengthInfoService;
@@ -21,6 +22,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
 @RequestMapping(value = "/strength")
@@ -39,6 +41,19 @@ public class StrengthController {
             return badRequest().body(format("date = %s has an invalid format.", date));
         } catch (IllegalArgumentException exception) {
             return badRequest().body(exception.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/{userId}", method = GET)
+    public ResponseEntity<?> getLatestBodyInfo(@PathVariable String userId) {
+
+        try {
+            StrengthInfo strengthInfo = strengthInfoService.getLatest(decode(userId));
+
+            return ok(strengthInfo);
+        } catch (IllegalArgumentException exception) {
+            return badRequest()
+                    .body(exception.getMessage());
         }
     }
 

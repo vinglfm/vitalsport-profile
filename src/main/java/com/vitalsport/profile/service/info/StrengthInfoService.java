@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class StrengthInfoService implements InfoService<InfoId, StrengthInfo> {
+public class StrengthInfoService implements InfoService<InfoId, StrengthInfo>,
+        LatestMeasurementProvider<String, StrengthInfo> {
 
     private StrengthInfoRepository strengthInfoRepository;
 
@@ -54,5 +55,16 @@ public class StrengthInfoService implements InfoService<InfoId, StrengthInfo> {
         log.info("Deleting strengthInfo for id = {}", id);
 
         strengthInfoRepository.delete(id);
+    }
+
+    @Override
+    public StrengthInfo getLatest(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException("id couldn't be null");
+        }
+
+        log.debug("Retrieving latest strengthInfo for id = {}", id);
+
+        return strengthInfoRepository.findTopByIdUserIdOrderByIdDateDesc(id);
     }
 }

@@ -5,4 +5,6 @@ import com.vitalsport.profile.model.StrengthInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StrengthInfoRepository extends JpaRepository<StrengthInfo, InfoId> {
+
+    StrengthInfo findTopByIdUserIdOrderByIdDateDesc(String userId);
 }

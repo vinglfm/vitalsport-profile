@@ -44,8 +44,22 @@ public class BodyController {
         }
     }
 
+    @RequestMapping(value = "/{userId}", method = GET)
+    public ResponseEntity<?> getLatestBodyInfo(@PathVariable String userId) {
+
+        try {
+            BodyInfo bodyInfo = bodyInfoService.getLatest(decode(userId));
+
+            return ok(bodyInfo);
+        } catch (IllegalArgumentException exception) {
+            return badRequest()
+                    .body(exception.getMessage());
+        }
+    }
+
     @RequestMapping(value = "/{userId}/{date}", method = GET)
-    public ResponseEntity<?> getBodyInfo(@PathVariable String userId, @PathVariable String date) {
+    public ResponseEntity<?> getBodyInfo(@PathVariable String userId,
+                                         @PathVariable String date) {
 
         try {
             BodyInfo bodyInfo = bodyInfoService.get(prepareBodyId(userId, date));
@@ -121,6 +135,7 @@ public class BodyController {
         }
     }
 
+    //TODO: move to infoId factory to hide it creation details like decoding
     private InfoId prepareBodyId(String userId, String date) {
         return new InfoId(decode(userId), getMeasurementDate(date));
     }

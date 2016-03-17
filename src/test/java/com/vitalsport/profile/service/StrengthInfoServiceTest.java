@@ -1,9 +1,11 @@
 package com.vitalsport.profile.service;
 
+import com.vitalsport.profile.model.BodyInfo;
 import com.vitalsport.profile.model.InfoId;
 import com.vitalsport.profile.model.StrengthInfo;
 import com.vitalsport.profile.repository.StrengthInfoRepository;
 import com.vitalsport.profile.service.info.StrengthInfoService;
+import org.assertj.core.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -43,6 +45,18 @@ public class StrengthInfoServiceTest extends BaseServiceTest {
 
         verify(mockStrengthInfoRepository, times(1)).findOne(infoId);
         assertThat(actualResult).isEqualToComparingFieldByField(strengthInfo);
+    }
+
+    @Test
+    public void latestBodyInfoIsReturnedByUserId() {
+        prepareStrengthInfo(prepareInfoId(userId1, localDate1));
+        StrengthInfo expectedResult = prepareStrengthInfo(prepareInfoId(userId1, localDate2));
+
+        when(mockStrengthInfoRepository.findTopByIdUserIdOrderByIdDateDesc(userId1)).thenReturn(expectedResult);
+        StrengthInfo actualResult = strengthInfoService.getLatest(userId1);
+
+        verify(mockStrengthInfoRepository, times(1)).findTopByIdUserIdOrderByIdDateDesc(userId1);
+        Assertions.assertThat(actualResult).isEqualToComparingFieldByField(expectedResult);
     }
 
     @Test
