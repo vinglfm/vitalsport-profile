@@ -1,12 +1,10 @@
 package com.vitalsport.profile.service;
 
-import com.vitalsport.profile.model.BodyInfo;
 import com.vitalsport.profile.model.InfoId;
 import com.vitalsport.profile.model.StrengthInfo;
 import com.vitalsport.profile.repository.StrengthInfoRepository;
 import com.vitalsport.profile.service.info.StrengthInfoService;
 import org.assertj.core.api.Assertions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 

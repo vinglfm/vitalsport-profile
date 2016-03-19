@@ -9,9 +9,7 @@ import java.io.IOException;
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 import static com.jayway.restassured.http.ContentType.JSON;
-import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
-import static org.apache.http.HttpStatus.SC_NOT_FOUND;
-import static org.apache.http.HttpStatus.SC_OK;
+import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.Matchers.equalTo;
 
 public class BodyInfoEndToEndTest extends BaseEndToEndTest {
@@ -34,7 +32,7 @@ public class BodyInfoEndToEndTest extends BaseEndToEndTest {
     public void postReturnsOkOnSuccess() {
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1)
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
     }
 
     @Test
@@ -92,7 +90,7 @@ public class BodyInfoEndToEndTest extends BaseEndToEndTest {
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1);
 
         when().delete(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1)
-                .then().statusCode(SC_OK).body(equalTo("Delete has been applied."));
+                .then().statusCode(SC_NO_CONTENT);
     }
 
     @Test
@@ -105,10 +103,10 @@ public class BodyInfoEndToEndTest extends BaseEndToEndTest {
     public void getAllMeasurementDatesReturnsDatesForValidUser() {
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1)
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate2)
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         when().get(BASE_URL + "{userId}/allMeasurementDates", encodedUserId)
                 .then().statusCode(SC_OK).body(equalTo("[" + measurementDate1 + ", " + measurementDate2 + "]"));
     }
@@ -123,10 +121,10 @@ public class BodyInfoEndToEndTest extends BaseEndToEndTest {
     public void getAllMeasurementYearsReturnsYearsForValidUser() {
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1)
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate2)
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         when().get(BASE_URL + "{userId}/measurementYears", encodedUserId)
                 .then().statusCode(SC_OK).body(equalTo("[" + year +"]"));
     }
@@ -154,10 +152,10 @@ public class BodyInfoEndToEndTest extends BaseEndToEndTest {
     public void getMeasurementMonthsReturnsMonthsForValidInputData() {
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1)
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate2)
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         when().get(BASE_URL + "{userId}/{year}/measurementMonths", encodedUserId, year)
                 .then().statusCode(SC_OK).body(equalTo("[" + month1 + "," + month2 + "]"));
     }
@@ -166,13 +164,13 @@ public class BodyInfoEndToEndTest extends BaseEndToEndTest {
     public void getMeasurementMonthsNotReturnsDuplicateMonth() {
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1)
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate2)
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, localMeasurementDate2.plusDays(1).toString())
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         when().get(BASE_URL + "{userId}/{year}/measurementMonths", encodedUserId, year)
                 .then().statusCode(SC_OK).body(equalTo("[" + month1 + "," + month2 + "]"));
     }
@@ -181,10 +179,10 @@ public class BodyInfoEndToEndTest extends BaseEndToEndTest {
     public void getMeasurementDaysReturnsEmptyResultForCorrectUserIdAndYearWithAbsentMonth() {
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1)
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate2)
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         when().get(BASE_URL + "{userId}/{year}/{month}/measurementDays", encodedUserId, year, otherMonth)
                 .then().statusCode(SC_OK).body(equalTo("[]"));
     }
@@ -193,10 +191,10 @@ public class BodyInfoEndToEndTest extends BaseEndToEndTest {
     public void getMeasurementDaysReturnsEmptyResultForCorrectUserIdAndWithAbsentYear() {
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1)
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate2)
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         when().get(BASE_URL + "{userId}/{year}/{month}/measurementDays", encodedUserId, otherYear, month1)
                 .then().statusCode(SC_OK).body(equalTo("[]"));
     }
@@ -211,10 +209,10 @@ public class BodyInfoEndToEndTest extends BaseEndToEndTest {
     public void getMeasurementDaysReturnsCorrectDayResultForValidInputData() {
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1)
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate2)
-                .then().statusCode(SC_OK).body(equalTo("User body info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         when().get(BASE_URL + "{userId}/{year}/{month}/measurementDays", encodedUserId, year, month1)
                 .then().statusCode(SC_OK).body(equalTo("[" + day1 + "]"));
     }

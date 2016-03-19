@@ -1,6 +1,5 @@
 package com.vitalsport.profile.web;
 
-import com.vitalsport.profile.model.BodyInfo;
 import com.vitalsport.profile.model.InfoId;
 import com.vitalsport.profile.model.StrengthInfo;
 import com.vitalsport.profile.service.info.StrengthInfoService;
