@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
-import java.util.zip.DataFormatException;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -43,11 +42,7 @@ public class ExceptionControllerAdvice {
     }
 
     private VndErrors.VndError prepareVndError(Throwable exception) {
-
-        Optional<Throwable> cause = Optional.of(Optional.of(exception.getCause()).orElse());
-
-
-        String message = Optional.of(exception.getCause().getMessage())
+        String message = Optional.ofNullable(exception.getCause()).map(Throwable::getMessage)
                 .orElse(exception.getClass().getSimpleName());
         return new VndErrors.VndError(exception.getLocalizedMessage(), message);
     }

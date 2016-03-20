@@ -1,5 +1,6 @@
 package com.vitalsport.profile.web;
 
+import com.google.common.collect.ImmutableMap;
 import com.vitalsport.profile.model.InfoId;
 import com.vitalsport.profile.model.StrengthInfo;
 import com.vitalsport.profile.service.info.StrengthInfoService;
@@ -19,9 +20,7 @@ import static com.vitalsport.profile.common.CommonUtils.decode;
 import static com.vitalsport.profile.common.CommonUtils.getMeasurementDate;
 import static java.lang.String.format;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.ResponseEntity.badRequest;
-import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.http.ResponseEntity.status;
+import static org.springframework.http.ResponseEntity.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
@@ -33,59 +32,34 @@ public class StrengthController {
     private StrengthInfoService strengthInfoService;
 
     @RequestMapping(value = "/{userId}/{date}", method = RequestMethod.POST)
-    public ResponseEntity<String> saveStrengthInfo(@PathVariable String userId, @PathVariable String date,
+    public ResponseEntity<?> saveStrengthInfo(@PathVariable String userId, @PathVariable String date,
                                                @RequestBody StrengthInfo strengthInfo) {
-        try {
             strengthInfoService.save(prepareStrengthId(userId, date), strengthInfo);
-            return ok("User strength info has been saved.");
-        } catch (DateTimeParseException exception) {
-            return badRequest().body(format("date = %s has an invalid format.", date));
-        } catch (IllegalArgumentException exception) {
-            return badRequest().body(exception.getMessage());
-        }
+            return noContent().build();
     }
 
     @RequestMapping(value = "/{userId}", method = GET)
-    public ResponseEntity<?> getLatestBodyInfo(@PathVariable String userId) {
-
-        try {
-            StrengthInfo strengthInfo = strengthInfoService.getLatest(decode(userId));
-
-            return ok(strengthInfo);
-        } catch (IllegalArgumentException exception) {
-            return badRequest()
-                    .body(exception.getMessage());
-        }
+    public ResponseEntity<?> getLatestStrengthInfo(@PathVariable String userId) {
+        StrengthInfo latestInfo = strengthInfoService.getLatest(decode(userId));
+        return latestInfo == null ? status(NOT_FOUND)
+                .body(ImmutableMap.of("data", "Strength info wasn't found for userId = " + userId))
+                : ok(latestInfo);
     }
 
     @RequestMapping(value = "/{userId}/{date}", method = RequestMethod.GET)
     public ResponseEntity<?> getStrengthInfo(@PathVariable String userId, @PathVariable String date) {
 
-        try {
             StrengthInfo strengthInfo = strengthInfoService.get(prepareStrengthId(userId, date));
 
             return (strengthInfo == null ?
-                    status(NOT_FOUND).body("Strength info wasn't found for userId = " + userId + " and date = " + date)
+                    status(NOT_FOUND).body(ImmutableMap.of("data","Strength info wasn't found for userId = " + userId + " and date = " + date))
                     : ok(strengthInfo));
-        } catch (DateTimeParseException exception) {
-            return badRequest().body(format("date = %s has an invalid format.", date));
-        } catch (IllegalArgumentException exception) {
-            return badRequest().body(exception.getMessage());
-        }
     }
 
     @RequestMapping(value = "/{userId}/{date}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteStrengthInfo(@PathVariable String userId, @PathVariable String date) {
-        try {
+    public ResponseEntity<?> deleteStrengthInfo(@PathVariable String userId, @PathVariable String date) {
             strengthInfoService.delete(prepareStrengthId(userId, date));
-            return ok("Delete has been applied.");
-        } catch (DateTimeParseException exception) {
-            return badRequest().body(format("date = %s has an invalid format.", date));
-        } catch (EmptyResultDataAccessException exception) {
-            return status(NOT_FOUND).body(String.format("Strength info for userId = %s and date = %s wasn't found.", userId, date));
-        } catch (IllegalArgumentException exception) {
-            return badRequest().body(exception.getMessage());
-        }
+            return noContent().build();
     }
 
     private InfoId prepareStrengthId(String userId, String date) {

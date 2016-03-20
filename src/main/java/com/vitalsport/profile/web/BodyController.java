@@ -1,17 +1,14 @@
 package com.vitalsport.profile.web;
 
+import com.google.common.collect.ImmutableMap;
 import com.vitalsport.profile.model.InfoId;
 import com.vitalsport.profile.model.BodyInfo;
 import com.vitalsport.profile.service.info.BodyInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.format.DateTimeParseException;
-import java.util.Collection;
 
 import static com.vitalsport.profile.common.CommonUtils.decode;
 import static com.vitalsport.profile.common.CommonUtils.getMeasurementDate;
@@ -41,7 +38,9 @@ public class BodyController {
 
     @RequestMapping(value = "/{userId}", method = GET)
     public ResponseEntity<?> getLatestBodyInfo(@PathVariable String userId) {
-        return ok(bodyInfoService.getLatest(decode(userId)));
+        BodyInfo latestInfo = bodyInfoService.getLatest(decode(userId));
+        return latestInfo == null ? status(NOT_FOUND).body(ImmutableMap.of("data", "BodyInfo wasn't found for userId = " + userId)) :
+                ok(latestInfo);
     }
 
     @RequestMapping(value = "/{userId}/{date}", method = GET)
@@ -49,7 +48,7 @@ public class BodyController {
                                          @PathVariable String date) {
         BodyInfo bodyInfo = bodyInfoService.get(prepareBodyId(userId, date));
         return (bodyInfo == null ?
-                status(NOT_FOUND).body("BodyInfo wasn't found for userId = " + userId + " date = " + date)
+                status(NOT_FOUND).body(ImmutableMap.of("data", "BodyInfo wasn't found for userId = " + userId + " date = " + date))
                 : ok(bodyInfo));
     }
 

@@ -10,9 +10,7 @@ import java.io.IOException;
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 import static com.jayway.restassured.http.ContentType.JSON;
-import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
-import static org.apache.http.HttpStatus.SC_NOT_FOUND;
-import static org.apache.http.HttpStatus.SC_OK;
+import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.Matchers.equalTo;
 
 public class StrengthInfoEndToEndTest extends BaseEndToEndTest {
@@ -28,14 +26,14 @@ public class StrengthInfoEndToEndTest extends BaseEndToEndTest {
     public void postReturnsBadRequestOnInvalidDate() {
         given().contentType(JSON).body(baseStrengthJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, invalidFormattedDate)
-                .then().statusCode(SC_BAD_REQUEST).body(equalTo("date = 20130621 has an invalid format."));
+                .then().statusCode(SC_BAD_REQUEST).body(equalTo("{\"logref\":\"Text '20130621' could not be parsed at index 0\",\"message\":\"DateTimeParseException\",\"links\":[]}"));
     }
 
     @Test
     public void postReturnsOkOnSuccess() {
         given().contentType(JSON).body(baseStrengthJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1)
-                .then().statusCode(SC_OK).body(equalTo("User strength info has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
     }
 
     @Test
@@ -54,13 +52,13 @@ public class StrengthInfoEndToEndTest extends BaseEndToEndTest {
     @Test
     public void getReturnsBadRequestOnInvalidDate() {
         when().get(BASE_URL + "{id}/{date}", encodedUserId, invalidFormattedDate)
-                .then().statusCode(SC_BAD_REQUEST).body(equalTo("date = 20130621 has an invalid format."));
+                .then().statusCode(SC_BAD_REQUEST).body(equalTo("{\"logref\":\"Text '20130621' could not be parsed at index 0\",\"message\":\"DateTimeParseException\",\"links\":[]}"));
     }
 
     @Test
     public void getReturnsNotFoundForAbsentUserId() {
         when().get(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1)
-                .then().statusCode(SC_NOT_FOUND);
+                .then().statusCode(SC_NOT_FOUND).body(equalTo("{\"data\":\"Strength info wasn't found for userId = dmluZ2xmbUBnbWFpbC5jb20= and date = 2013-06-15\"}"));
     }
 
     @Test
@@ -69,7 +67,7 @@ public class StrengthInfoEndToEndTest extends BaseEndToEndTest {
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1);
 
         when().get(BASE_URL + "{id}/{date}", encodedUserId, measurementDate2)
-                .then().statusCode(SC_NOT_FOUND);
+                .then().statusCode(SC_NOT_FOUND).body(equalTo("{\"data\":\"Strength info wasn't found for userId = dmluZ2xmbUBnbWFpbC5jb20= and date = 2013-07-23\"}"));
     }
 
     @Test
@@ -82,9 +80,24 @@ public class StrengthInfoEndToEndTest extends BaseEndToEndTest {
     }
 
     @Test
+    public void getLatestStrengthInfoForAbsentUserId() {
+        when().get(BASE_URL + "{id}", encodedUserId)
+                .then().statusCode(SC_NOT_FOUND).body(equalTo("{\"data\":\"Strength info wasn't found for userId = dmluZ2xmbUBnbWFpbC5jb20=\"}"));
+    }
+
+    @Test
+    public void getLatestStrengthInfoForCorrectUserId() {
+        given().contentType(JSON).body(baseStrengthJson)
+                .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1);
+
+        when().get(BASE_URL + "{id}", encodedUserId)
+                .then().statusCode(SC_OK).body(equalTo(baseStrengthJson));
+    }
+
+    @Test
     public void deleteReturnsBadRequestOnBadFormattedDate() {
         when().delete(BASE_URL + "{id}/{date}", encodedUserId, invalidFormattedDate)
-                .then().statusCode(SC_BAD_REQUEST).body(equalTo("date = 20130621 has an invalid format."));
+                .then().statusCode(SC_BAD_REQUEST).body(equalTo("{\"logref\":\"Text '20130621' could not be parsed at index 0\",\"message\":\"DateTimeParseException\",\"links\":[]}"));
     }
 
     @Test
@@ -93,7 +106,7 @@ public class StrengthInfoEndToEndTest extends BaseEndToEndTest {
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1);
 
         when().delete(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1)
-                .then().statusCode(SC_OK).body(equalTo("Delete has been applied."));
+                .then().statusCode(SC_NO_CONTENT);
     }
 
 

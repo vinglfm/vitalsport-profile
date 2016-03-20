@@ -4,6 +4,7 @@ import com.vitalsport.profile.repository.BodyInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
 import java.io.IOException;
 
 import static com.jayway.restassured.RestAssured.given;
@@ -25,7 +26,7 @@ public class BodyInfoEndToEndTest extends BaseEndToEndTest {
     public void postReturnsBadRequestOnInvalidDate() {
         given().contentType(JSON).body(baseBodyJson)
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, invalidFormattedDate)
-                .then().statusCode(SC_BAD_REQUEST).body(equalTo("date = 20130621 has an invalid format."));
+                .then().statusCode(SC_BAD_REQUEST).body(equalTo("{\"logref\":\"Text '20130621' could not be parsed at index 0\",\"message\":\"DateTimeParseException\",\"links\":[]}"));
     }
 
     @Test
@@ -51,13 +52,13 @@ public class BodyInfoEndToEndTest extends BaseEndToEndTest {
     @Test
     public void getReturnsBadRequestOnInvalidDate() {
         when().get(BASE_URL + "{id}/{date}", encodedUserId, invalidFormattedDate)
-                .then().statusCode(SC_BAD_REQUEST).body(equalTo("date = 20130621 has an invalid format."));
+                .then().statusCode(SC_BAD_REQUEST).body(equalTo("{\"logref\":\"Text '20130621' could not be parsed at index 0\",\"message\":\"DateTimeParseException\",\"links\":[]}"));
     }
 
     @Test
     public void getReturnsNotFoundForAbsentUserId() {
         when().get(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1)
-                .then().statusCode(SC_NOT_FOUND);
+                .then().statusCode(SC_NOT_FOUND).body(equalTo("{\"data\":\"BodyInfo wasn't found for userId = dmluZ2xmbUBnbWFpbC5jb20= date = 2013-06-15\"}"));
     }
 
     @Test
@@ -66,7 +67,7 @@ public class BodyInfoEndToEndTest extends BaseEndToEndTest {
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1);
 
         when().get(BASE_URL + "{id}/{date}", encodedUserId, measurementDate2)
-                .then().statusCode(SC_NOT_FOUND);
+                .then().statusCode(SC_NOT_FOUND).body(equalTo("{\"data\":\"BodyInfo wasn't found for userId = dmluZ2xmbUBnbWFpbC5jb20= date = 2013-07-23\"}"));
     }
 
     @Test
@@ -79,9 +80,24 @@ public class BodyInfoEndToEndTest extends BaseEndToEndTest {
     }
 
     @Test
+    public void getLatestBodyInfoForAbsentUserId() {
+        when().get(BASE_URL + "{id}", encodedUserId)
+                .then().statusCode(SC_NOT_FOUND).body(equalTo("{\"data\":\"BodyInfo wasn't found for userId = dmluZ2xmbUBnbWFpbC5jb20=\"}"));
+    }
+
+    @Test
+    public void getLatestBodyInfoForCorrectUserId() {
+        given().contentType(JSON).body(baseBodyJson)
+                .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate1);
+
+        when().get(BASE_URL + "{id}", encodedUserId)
+                .then().statusCode(SC_OK).body(equalTo(baseBodyJson));
+    }
+
+    @Test
     public void deleteReturnsBadRequestOnBadFormattedDate() {
         when().delete(BASE_URL + "{id}/{date}", encodedUserId, invalidFormattedDate)
-                .then().statusCode(SC_BAD_REQUEST).body(equalTo("date = 20130621 has an invalid format."));
+                .then().statusCode(SC_BAD_REQUEST).body(equalTo("{\"logref\":\"Text '20130621' could not be parsed at index 0\",\"message\":\"DateTimeParseException\",\"links\":[]}"));
     }
 
     @Test
@@ -126,7 +142,7 @@ public class BodyInfoEndToEndTest extends BaseEndToEndTest {
                 .when().post(BASE_URL + "{id}/{date}", encodedUserId, measurementDate2)
                 .then().statusCode(SC_NO_CONTENT);
         when().get(BASE_URL + "{userId}/measurementYears", encodedUserId)
-                .then().statusCode(SC_OK).body(equalTo("[" + year +"]"));
+                .then().statusCode(SC_OK).body(equalTo("[" + year + "]"));
     }
 
     @Test
