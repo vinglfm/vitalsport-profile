@@ -1,5 +1,7 @@
 package com.vitalsport.profile.web;
 
+import com.google.common.collect.ImmutableBiMap;
+import com.google.common.collect.ImmutableMap;
 import com.vitalsport.profile.model.Measurements;
 import com.vitalsport.profile.service.measurements.MeasurementsService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,27 +31,19 @@ public class MeasurementController {
     private MeasurementsService measurementsService;
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.PUT)
-    public ResponseEntity<String> saveMeasurements(@PathVariable String userId,
+    public ResponseEntity<?> saveMeasurements(@PathVariable String userId,
                                                @RequestBody Measurements measurements) {
-        try {
             measurementsService.update(decode(userId), measurements);
-            return ok("User measurements has been saved.");
-        } catch (IllegalArgumentException exception) {
-            return badRequest().body(exception.getMessage());
-        }
+            return noContent().build();
     }
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public ResponseEntity<?> getMeasurements(@PathVariable String userId) {
 
-        try {
             Measurements measurements = measurementsService.get(decode(userId));
             return (measurements == null ?
-                    status(NOT_FOUND).body("Measurements wasn't found for userId = " + userId )
+                    status(NOT_FOUND).body(ImmutableMap.of("data", "Measurements wasn't found for userId = " + userId))
                     : ok(measurements));
-        } catch (IllegalArgumentException exception) {
-            return badRequest().body(exception.getMessage());
-        }
     }
 
 }

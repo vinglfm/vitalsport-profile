@@ -10,6 +10,7 @@ import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 import static com.jayway.restassured.http.ContentType.JSON;
 import static org.apache.http.HttpStatus.SC_NOT_FOUND;
+import static org.apache.http.HttpStatus.SC_NO_CONTENT;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -36,33 +37,28 @@ public class MeasurementEndToEndTest extends BaseEndToEndTest {
     }
 
     @Test
-    public void putReturnsOkOnSuccess() {
+    public void putReturnsNoContentOnSuccess() {
         given().contentType(JSON).body(baseMeasurementsJson)
                 .when().put(BASE_URL + "{userId}", encodedUserId)
-                .then().statusCode(SC_OK);
+                .then().statusCode(SC_NO_CONTENT);
     }
 
     @Test
     public void putUpdatesMeasurements() {
         given().contentType(JSON).body(baseMeasurementsJson)
                 .when().put(BASE_URL + "{userId}", encodedUserId)
-                .then().statusCode(SC_OK).body(equalTo("User measurements has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         given().contentType(JSON).body(updatedMeasurementsJson)
                 .when().put(BASE_URL + "{userId}", encodedUserId)
-                .then().statusCode(SC_OK).body(equalTo("User measurements has been saved."));
+                .then().statusCode(SC_NO_CONTENT);
         when().get(BASE_URL + "{userId}", encodedUserId)
                 .then().statusCode(SC_OK).body(equalTo(updatedMeasurementsJson));
-    }
-
-    @Test(enabled = false)
-    public void putNotInsertMeasurements() {
-
     }
 
     @Test
     public void getReturnsNotFoundForAbsentUser() {
         when().get(BASE_URL + "{userId}", encodedUserId)
-                .then().statusCode(SC_NOT_FOUND);
+                .then().statusCode(SC_NOT_FOUND).body(equalTo("{\"data\":\"Measurements wasn't found for userId = dmluZ2xmbUBnbWFpbC5jb20=\"}"));
     }
 
     @BeforeMethod
